@@ -1,0 +1,1 @@
+docker build -t Users:latest -f MamisSolidarias.WebAPI.Users/Dockerfile .
