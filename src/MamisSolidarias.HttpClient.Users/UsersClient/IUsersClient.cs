@@ -1,8 +1,9 @@
-using MamisSolidarias.WebAPI.Users.Endpoints.Test;
+
+using MamisSolidarias.WebAPI.Users.Endpoints.Users.POST;
 
 namespace MamisSolidarias.HttpClient.Users.UsersClient;
 
 public interface IUsersClient
 {
-    Task<(int, Response?)> GetTestAsync(Request requestParameters, CancellationToken token = default);
+    Task<Response?> CreateUser(Request parameters, CancellationToken token = default);
 }

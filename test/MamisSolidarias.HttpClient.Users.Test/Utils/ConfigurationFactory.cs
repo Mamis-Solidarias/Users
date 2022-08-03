@@ -5,9 +5,7 @@ namespace MamisSolidarias.HttpClient.Users.Utils;
 
 internal class ConfigurationFactory
 {
-    internal static IConfiguration GetUsersConfiguration(
-        string baseUrl = "https://test.com", int retries = 3, int timeout = 5
-    )
+    internal static IConfiguration GetUsersConfiguration(string baseUrl = "https://test.com", int retries = 3, int timeout = 500)
     {
         var inMemorySettings = new Dictionary<string, string>
         {

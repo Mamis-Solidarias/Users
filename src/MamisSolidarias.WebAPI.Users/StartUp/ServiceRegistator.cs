@@ -2,8 +2,8 @@ using FastEndpoints;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
 using MamisSolidarias.Infrastructure.Users;
+using MamisSolidarias.WebAPI.Users.Services;
 using Microsoft.EntityFrameworkCore;
-using OpenTelemetry.Exporter;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
@@ -45,6 +45,8 @@ internal static class ServiceRegistrator
                 t.UseNpgsql(connectionString,r=> r.MigrationsAssembly("MamisSolidarias.WebAPI.Users"))
                     .EnableSensitiveDataLogging(!builder.Environment.IsProduction())
         );
+
+        builder.Services.AddScoped<ITextHasher, TextHasher>();
 
         if (!builder.Environment.IsProduction())
             builder.Services.AddSwaggerDoc(tagIndex: 1, shortSchemaNames: true);
