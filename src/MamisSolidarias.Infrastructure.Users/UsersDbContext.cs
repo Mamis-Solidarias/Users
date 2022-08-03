@@ -1,6 +1,5 @@
 using MamisSolidarias.Infrastructure.Users.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 #pragma warning disable CS8618
 
 namespace MamisSolidarias.Infrastructure.Users;

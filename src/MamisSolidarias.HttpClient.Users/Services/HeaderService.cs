@@ -7,11 +7,11 @@ namespace MamisSolidarias.HttpClient.Users.Services;
 /// </summary>
 internal class HeaderService : IHeaderService
 {
-    private readonly IHttpContextAccessor _contextAccessor;
+    private readonly IHttpContextAccessor? _contextAccessor;
 
-    public HeaderService(IHttpContextAccessor ctxa)
+    public HeaderService(IHttpContextAccessor? contextAccessor)
     {
-        _contextAccessor = ctxa;
+        _contextAccessor = contextAccessor;
     }
 
     /// <summary>
@@ -20,7 +20,7 @@ internal class HeaderService : IHeaderService
     /// <returns>The Authorization header</returns>
     public string? GetAuthorization()
     {
-        return _contextAccessor.HttpContext?.Request.Headers["Authorization"];
+        return _contextAccessor?.HttpContext?.Request.Headers["Authorization"];
     }
 }
 
