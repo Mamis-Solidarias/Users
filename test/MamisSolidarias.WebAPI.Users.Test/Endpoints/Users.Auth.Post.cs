@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
 using FluentAssertions;
@@ -41,8 +42,16 @@ internal class Users_Auth_Post
         
         _endpoint = EndpointFactory.CreateEndpoint<Endpoint, Request, Response>(
             s => s.AddSingleton(_mockLogger.Object),
-            null, _mockDbAccess.Object,_mockedTextHasher.Object, config
+            null,_mockedTextHasher.Object, config, _mockDbAccess.Object
         );
+    }
+
+    [TearDown]
+    public void Dispose()
+    {
+        _mockLogger.Reset();
+        _mockedTextHasher.Reset();
+        _mockDbAccess.Reset();
     }
 
     [Test]
@@ -57,7 +66,7 @@ internal class Users_Auth_Post
             Password = user.Password
         };
 
-        _mockDbAccess.Setup(t => t.FindUserByEmail(It.Is<string>(r => r == user.Email)))
+        _mockDbAccess.Setup(t => t.FindUserByEmail(It.Is<string>(r => r == user.Email),It.IsAny<CancellationToken>()))
             .ReturnsAsync(user);
 
         _mockedTextHasher.Setup(t => t.Hash(It.IsAny<string>(),It.IsAny<byte[]>()))
@@ -91,7 +100,7 @@ internal class Users_Auth_Post
     {
         // Arrange
         var user = DataFactory.GetUser();
-        _mockDbAccess.Setup(t => t.FindUserByEmail(It.Is<string>(r=> r == user.Email)))
+        _mockDbAccess.Setup(t => t.FindUserByEmail(It.Is<string>(r=> r == user.Email),It.IsAny<CancellationToken>()))
             .ReturnsAsync((User?)null);
         var request = new Request
         {
@@ -111,7 +120,7 @@ internal class Users_Auth_Post
     {
         // Arrange
         var user = DataFactory.GetUser();
-        _mockDbAccess.Setup(t => t.FindUserByEmail(It.Is<string>(r=> r == user.Email)))
+        _mockDbAccess.Setup(t => t.FindUserByEmail(It.Is<string>(r=> r == user.Email),It.IsAny<CancellationToken>()))
             .ReturnsAsync(user);
         _mockedTextHasher.Setup(t => t.Hash(It.IsAny<string>(),It.IsAny<byte[]>()))
             .Returns((Convert.FromBase64String(user.Salt), "other password"));

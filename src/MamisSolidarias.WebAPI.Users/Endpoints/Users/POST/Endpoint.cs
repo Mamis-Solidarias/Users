@@ -9,12 +9,12 @@ namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.POST;
 internal class Endpoint : Endpoint<Request, Response>
 {
     private readonly ITextHasher _textHasher;
-    private readonly DbService _db;
+    private readonly DbAccess _db;
 
-    public Endpoint(ITextHasher textHasher, UsersDbContext dbContext, DbService? db = null)
+    public Endpoint(ITextHasher textHasher, UsersDbContext dbContext, DbAccess? db = null)
     {
         _textHasher = textHasher;
-        _db = db ?? new DbService(dbContext);
+        _db = db ?? new DbAccess(dbContext);
     }
     
     public override void Configure()

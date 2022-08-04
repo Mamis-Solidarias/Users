@@ -15,11 +15,11 @@ internal class DbAccess
         _dbContext = dbContext;
     }
 
-    public virtual async Task<User?> FindUserByEmail(string email)
+    public virtual async Task<User?> FindUserByEmail(string email, CancellationToken ct)
     {
         ArgumentNullException.ThrowIfNull(_dbContext);
         return await _dbContext.Users
             .Include(t=> t.Roles)
-            .FirstOrDefaultAsync(t => t.Email == email);
+            .FirstOrDefaultAsync(t => t.Email == email,ct);
     }
 }

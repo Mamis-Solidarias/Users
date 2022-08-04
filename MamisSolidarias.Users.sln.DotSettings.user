@@ -24,13 +24,16 @@
 &lt;/SessionState&gt;</s:String>
 	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c9244d27_002Da57d_002D4efc_002D96d4_002D03be859395ed/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="PostTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;NUnit3x::C438A7D2-F3A0-4C5B-AF24-B4800FC1229F::net6.0::MamisSolidarias.WebAPI.Users.Endpoints.Users.PostTest&lt;/TestId&gt;
-    &lt;TestId&gt;NUnit3x::11775FBD-97F2-4E2C-A10F-8D6306FDCD71::net6.0::MamisSolidarias.HttpClient.Users.UsersClient.CreateUserTest.WithValidParameters_Succeeds&lt;/TestId&gt;
-    &lt;TestId&gt;NUnit3x::11775FBD-97F2-4E2C-A10F-8D6306FDCD71::net6.0::MamisSolidarias.HttpClient.Users.UsersClient.SignInTest.WithValidParameters_Succeeds&lt;/TestId&gt;
-    &lt;TestId&gt;NUnit3x::11775FBD-97F2-4E2C-A10F-8D6306FDCD71::net6.0::MamisSolidarias.HttpClient.Users.UsersClient.SignInTest&lt;/TestId&gt;
-    &lt;TestId&gt;NUnit3x::C438A7D2-F3A0-4C5B-AF24-B4800FC1229F::net6.0::MamisSolidarias.WebAPI.Users.Endpoints.Users_Password_Put.IsAdmin_WithValidArguments_Succeeds&lt;/TestId&gt;
-    &lt;TestId&gt;NUnit3x::C438A7D2-F3A0-4C5B-AF24-B4800FC1229F::net6.0::MamisSolidarias.WebAPI.Users.Endpoints.Users_Password_Put&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
+  &lt;Or&gt;
+    &lt;TestAncestor&gt;
+      &lt;TestId&gt;NUnit3x::C438A7D2-F3A0-4C5B-AF24-B4800FC1229F::net6.0::MamisSolidarias.WebAPI.Users.Endpoints.Users.PostTest&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::11775FBD-97F2-4E2C-A10F-8D6306FDCD71::net6.0::MamisSolidarias.HttpClient.Users.UsersClient.CreateUserTest.WithValidParameters_Succeeds&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::11775FBD-97F2-4E2C-A10F-8D6306FDCD71::net6.0::MamisSolidarias.HttpClient.Users.UsersClient.SignInTest.WithValidParameters_Succeeds&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::11775FBD-97F2-4E2C-A10F-8D6306FDCD71::net6.0::MamisSolidarias.HttpClient.Users.UsersClient.SignInTest&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::C438A7D2-F3A0-4C5B-AF24-B4800FC1229F::net6.0::MamisSolidarias.WebAPI.Users.Endpoints.Users_Password_Put.IsAdmin_WithValidArguments_Succeeds&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::C438A7D2-F3A0-4C5B-AF24-B4800FC1229F::net6.0::MamisSolidarias.WebAPI.Users.Endpoints.Users_Password_Put&lt;/TestId&gt;
+    &lt;/TestAncestor&gt;
+    &lt;Project Location="/Users/ldellisola/dev/mamis-solidarias/users/test/MamisSolidarias.WebAPI.Users.Test" Presentation="&amp;lt;test&amp;gt;\&amp;lt;MamisSolidarias.WebAPI.Users.Test&amp;gt;" /&gt;
+  &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Solidarias/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

@@ -3,12 +3,12 @@ using MamisSolidarias.Infrastructure.Users.Models;
 
 namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.POST;
 
-internal class DbService
+internal class DbAccess
 {
     private readonly UsersDbContext? _dbContext;
 
-    public DbService() { }
-    public DbService(UsersDbContext dbContext)
+    public DbAccess() { }
+    public DbAccess(UsersDbContext dbContext)
     {
         _dbContext = dbContext;
     }
