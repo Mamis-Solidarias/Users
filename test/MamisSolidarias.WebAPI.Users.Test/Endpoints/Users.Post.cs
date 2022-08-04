@@ -13,13 +13,13 @@ using Moq;
 using NUnit.Framework;
 using Endpoint = MamisSolidarias.WebAPI.Users.Endpoints.Users.POST.Endpoint;
 
-namespace MamisSolidarias.WebAPI.Users.Endpoints.Users;
+namespace MamisSolidarias.WebAPI.Users.Endpoints;
 
-internal class PostTest
+internal class Users_Post
 {
     private readonly Mock<ILogger<Endpoint<Request, Response>>> _mockLogger = new();
     private readonly ITextHasher _textHasher = new TextHasher();
-    private readonly Mock<DbService> _mockDbService = new ();
+    private readonly Mock<DbAccess> _mockDbService = new ();
     private Endpoint _endpoint = null!;
 
     [SetUp]
@@ -29,6 +29,13 @@ internal class PostTest
             s => s.AddSingleton(_mockLogger.Object),
             _textHasher, null,_mockDbService.Object
         );
+    }
+
+    [TearDown]
+    public void Dispose()
+    {
+        _mockLogger.Reset();
+        _mockDbService.Reset();
     }
 
     [Test]

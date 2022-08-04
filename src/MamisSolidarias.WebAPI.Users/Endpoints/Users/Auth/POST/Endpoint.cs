@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using FastEndpoints;
 using FastEndpoints.Security;
 using MamisSolidarias.Infrastructure.Users;
@@ -28,7 +27,7 @@ internal class Endpoint : Endpoint<Request,Response>
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        var user = await _dbAccess.FindUserByEmail(req.Email);
+        var user = await _dbAccess.FindUserByEmail(req.Email,ct);
 
         if (user is null)
         {
