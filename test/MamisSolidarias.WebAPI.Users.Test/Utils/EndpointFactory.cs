@@ -1,4 +1,5 @@
 using System;
+using System.Security.Claims;
 using FastEndpoints;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -53,18 +54,26 @@ internal static class EndpointFactory
     /// It creates a fake endpoint without response with added services
     /// </summary>
     /// <param name="addServices">Function to add new Services, such as ILogger or any other dependency injected service</param>
+    /// <param name="user">User claims to mock</param>
+    /// <param name="dependencies">Constructor parameters</param>
     /// <typeparam name="TEndpoint">Endpoint class</typeparam>
     /// <typeparam name="TRequest">Request clas</typeparam>
     public static TEndpoint CreateEndpointWithoutResponse<TEndpoint, TRequest>(
-        Action<ServiceCollection>? addServices = null)
+        Action<ServiceCollection>? addServices = null,
+        ClaimsPrincipal? user = null,
+        params object?[]? dependencies
+    )
         where TEndpoint : Endpoint<TRequest> where TRequest : notnull, new()
     {
         return Factory.Create<TEndpoint>(ctx =>
         {
+            if (user is not null) 
+                ctx.HttpContext.User = user;
+            
             var services = new ServiceCollection();
             addServices?.Invoke(services);
 
             ctx.RequestServices = services.BuildServiceProvider();
-        });
+        },dependencies);
     }
 }

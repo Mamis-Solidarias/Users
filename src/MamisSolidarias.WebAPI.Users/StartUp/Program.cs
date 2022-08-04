@@ -1,4 +1,3 @@
-using MamisSolidarias.WebAPI.Users.Services;
 using MamisSolidarias.WebAPI.Users.StartUp;
 
 var builder = WebApplication.CreateBuilder(args);
