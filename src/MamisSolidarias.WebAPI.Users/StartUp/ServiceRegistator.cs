@@ -37,8 +37,8 @@ internal static class ServiceRegistrator
                 .AddHttpClientInstrumentation()
                 .AddAspNetCoreInstrumentation()
                 .AddEntityFrameworkCoreInstrumentation();
-        });        
-        
+        });
+
         builder.Services.AddFastEndpoints();
         builder.Services.AddAuthenticationJWTBearer(builder.Configuration["JWT:Key"]);
         builder.Services.AddAuthorization(t =>
