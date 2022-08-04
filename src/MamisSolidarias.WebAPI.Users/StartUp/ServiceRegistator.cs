@@ -37,9 +37,17 @@ internal static class ServiceRegistrator
                 .AddHttpClientInstrumentation()
                 .AddAspNetCoreInstrumentation()
                 .AddEntityFrameworkCoreInstrumentation();
-        });        
+        });
+
         builder.Services.AddFastEndpoints();
         builder.Services.AddAuthenticationJWTBearer(builder.Configuration["JWT:Key"]);
+        builder.Services.AddAuthorization(t =>
+        {
+            t.AddPolicy(Policies.Names.All.ToString(), policy => policy.ConfigurePolicy(Policies.Names.All));
+            t.AddPolicy(Policies.Names.CanRead.ToString(), policy => policy.ConfigurePolicy(Policies.Names.CanRead));
+            t.AddPolicy(Policies.Names.CanWrite.ToString(), policy => policy.ConfigurePolicy(Policies.Names.CanWrite));
+
+        });
         builder.Services.AddDbContext<UsersDbContext>(
             t => 
                 t.UseNpgsql(connectionString,r=> r.MigrationsAssembly("MamisSolidarias.WebAPI.Users"))

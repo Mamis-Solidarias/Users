@@ -25,7 +25,6 @@ internal static class EndpointFactory
         {
             var services = new ServiceCollection();
             addServices?.Invoke(services);
-
             ctx.RequestServices = services.BuildServiceProvider();
         },dependencies);
     }

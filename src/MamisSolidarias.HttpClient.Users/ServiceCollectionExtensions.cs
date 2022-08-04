@@ -27,6 +27,7 @@ public static class ServiceCollectionExtensions
         {
             client.BaseAddress = new Uri(configuration.BaseUrl);
             client.Timeout = TimeSpan.FromMilliseconds(configuration.Timeout);
+            client.DefaultRequestHeaders.Add("Content-Type","application/json");
         }).AddTransientHttpErrorPolicy(t =>
             t.WaitAndRetryAsync(configuration.Retries,
                     retryAttempt => TimeSpan.FromMilliseconds(100 * Math.Pow(2, retryAttempt)))
