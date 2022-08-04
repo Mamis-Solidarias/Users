@@ -8,9 +8,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FastEndpoints" Version="4.3.0" />
-        <PackageReference Include="FastEndpoints.Security" Version="4.3.0" />
-        <PackageReference Include="FastEndpoints.Swagger" Version="4.3.0" />
+        <PackageReference Include="FastEndpoints" Version="4.3.1" />
+        <PackageReference Include="FastEndpoints.Generator" Version="4.4.0" />
+        <PackageReference Include="FastEndpoints.Security" Version="4.3.1" />
+        <PackageReference Include="FastEndpoints.Swagger" Version="4.3.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.5">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

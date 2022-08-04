@@ -11,7 +11,7 @@ internal class Endpoint : Endpoint<Request, Response>
     private readonly ITextHasher _textHasher;
     private readonly DbService _db;
 
-    public Endpoint(ITextHasher textHasher, UsersDbContext dbContext, DbService? db)
+    public Endpoint(ITextHasher textHasher, UsersDbContext dbContext, DbService? db = null)
     {
         _textHasher = textHasher;
         _db = db ?? new DbService(dbContext);
@@ -20,7 +20,7 @@ internal class Endpoint : Endpoint<Request, Response>
     public override void Configure()
     {
         Post("users");
-        Policies("admin");
+        Policies(Services.Policies.Names.CanWrite.ToString());
     }
     
     public override async Task HandleAsync(Request req, CancellationToken ct)
