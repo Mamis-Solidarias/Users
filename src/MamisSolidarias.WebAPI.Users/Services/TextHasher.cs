@@ -8,7 +8,7 @@ public class TextHasher : ITextHasher
 
     // Recommended by Microsoft
     // https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/consumer-apis/password-hashing?view=aspnetcore-6.0
-    public (byte[],string) Hash(string text, byte[]? salt = null)
+    public virtual (byte[],string) Hash(string text, byte[]? salt = null)
     {
         if (salt is null)
         {
