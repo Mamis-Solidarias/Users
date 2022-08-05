@@ -16,6 +16,7 @@ using NUnit.Framework;
 
 namespace MamisSolidarias.WebAPI.Users.Endpoints;
 
+// ReSharper disable once InconsistentNaming
 internal class Users_Password_Put
 {
     private readonly Mock<ILogger<Endpoint<Request>>> _mockLogger = new();
