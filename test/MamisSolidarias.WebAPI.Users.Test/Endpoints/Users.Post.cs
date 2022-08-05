@@ -15,6 +15,7 @@ using Endpoint = MamisSolidarias.WebAPI.Users.Endpoints.Users.POST.Endpoint;
 
 namespace MamisSolidarias.WebAPI.Users.Endpoints;
 
+// ReSharper disable once InconsistentNaming
 internal class Users_Post
 {
     private readonly Mock<ILogger<Endpoint<Request, Response>>> _mockLogger = new();

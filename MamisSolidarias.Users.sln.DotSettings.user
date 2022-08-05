@@ -17,6 +17,9 @@
     &lt;TestId&gt;NUnit3x::11775FBD-97F2-4E2C-A10F-8D6306FDCD71::net6.0::MamisSolidarias.HttpClient.Users.UsersClient.SignInTest.WithValidParameters_Succeeds&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=bd918584_002De234_002D47fb_002D9114_002Dadc5c6104233/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Solution /&gt;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c739d7ae_002Db2f0_002D4ebf_002Dbb2a_002D5d03fc6b8c02/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="WithValidParameters_Succeeds" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;NUnit3x::11775FBD-97F2-4E2C-A10F-8D6306FDCD71::net6.0::MamisSolidarias.HttpClient.Users.UsersClient.CreateUserTest.WithValidParameters_Succeeds&lt;/TestId&gt;
