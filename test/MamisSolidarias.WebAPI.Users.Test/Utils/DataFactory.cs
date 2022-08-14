@@ -17,7 +17,7 @@ internal static class DataFactory
             .RuleFor(t=> t.CanWrite,t=> t.Random.Bool());
 
     private static readonly Faker<User> UserGenerator = new Faker<User>()
-        .RuleFor(t => t.Id, f => f.Random.Int())
+        .RuleFor(t => t.Id, f => f.Random.Int(0))
         .RuleFor(t => t.Name, f => f.Name.FindName())
         .RuleFor(t => t.Password, f => f.Internet.Password())
         .RuleFor(t => t.Email, (f, u) => f.Internet.Email(u.Name))
