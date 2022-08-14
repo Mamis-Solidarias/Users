@@ -1,4 +1,3 @@
-using MamisSolidarias.WebAPI.Users.Services;
 
 namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.GET;
 
