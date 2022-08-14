@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace MamisSolidarias.Infrastructure.Users.Models;
 
-public class User
+internal class User
 {
     public int Id { get; set; }
     public string Name { get; set; }

@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using FastEndpoints;
 using FluentAssertions;
 using MamisSolidarias.WebAPI.Users.Endpoints.Users.Roles.GET;
-using MamisSolidarias.WebAPI.Users.Services;
 using MamisSolidarias.WebAPI.Users.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -17,7 +16,6 @@ namespace MamisSolidarias.WebAPI.Users.Endpoints;
 internal class Users_Roles_Get
 {
     private readonly Mock<ILogger<EndpointWithoutRequest<Response>>> _mockLogger = new();
-    private readonly ITextHasher _textHasher = new TextHasher();
     private Endpoint _endpoint = null!;
 
     [SetUp]

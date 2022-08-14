@@ -8,7 +8,7 @@ public enum Services
     Users
 }
 
-public class Role
+internal class Role
 {
     public int Id { get; set; }
     public Services Service { get; set; }
@@ -16,7 +16,7 @@ public class Role
     public bool CanWrite { get; set; }
 }
 
-public class RoleTypeConfiguration : IEntityTypeConfiguration<Role>
+internal class RoleTypeConfiguration : IEntityTypeConfiguration<Role>
 {
     public void Configure(EntityTypeBuilder<Role> builder)
     {
