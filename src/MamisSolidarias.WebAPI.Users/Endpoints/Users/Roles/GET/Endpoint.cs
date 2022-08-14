@@ -14,7 +14,7 @@ internal class Endpoint : EndpointWithoutRequest<Response>
     {
         var roles = Enum.GetValues<Infrastructure.Users.Models.Services>()
             .Select(t => new RoleResponse(t.ToString(), true, true));
-
+        
         await SendOkAsync(new Response { Roles = roles }, ct);
     }
 }
