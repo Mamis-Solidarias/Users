@@ -28,7 +28,6 @@ internal class Users_Post
     {
         _endpoint = EndpointFactory.CreateEndpoint<Endpoint, Request, Response>(
             s => s.AddSingleton(_mockLogger.Object),
-            null,
             _textHasher, null,_mockDbService.Object
         );
     }

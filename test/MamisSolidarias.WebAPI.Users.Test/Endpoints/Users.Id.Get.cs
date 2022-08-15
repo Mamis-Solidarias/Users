@@ -26,7 +26,7 @@ internal class Users_Id_Get
     [SetUp]
     public void Setup()
     {
-        _endpoint = EndpointFactory.CreateEndpoint<Endpoint, Request,Response>(
+        _endpoint = EndpointFactory.CreateEndpointWithClaims<Endpoint, Request,Response>(
             s => s.AddSingleton(_mockLogger.Object),
             user: _mockClaims.Object,
             null, _mockDbAccess.Object
