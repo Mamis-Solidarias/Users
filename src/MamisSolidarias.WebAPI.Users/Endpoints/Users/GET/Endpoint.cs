@@ -4,7 +4,7 @@ using MamisSolidarias.Infrastructure.Users.Models;
 
 namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.GET;
 
-internal class Endpoint: Endpoint<Request,Response>
+internal class Endpoint : Endpoint<Request, Response>
 {
     private readonly DbAccess _db;
 
@@ -12,7 +12,7 @@ internal class Endpoint: Endpoint<Request,Response>
     {
         _db = db ?? new DbAccess(dbContext);
     }
-    
+
 
     public override void Configure()
     {
@@ -29,30 +29,32 @@ internal class Endpoint: Endpoint<Request,Response>
             };
             summary.Response<Response>();
             summary.Response(400, "Invalid parameters");
-            summary.Response(403,"The user does not have the necessary privileges");
+            summary.Response(403, "The user does not have the necessary privileges");
             summary.Response(401);
         });
     }
 
-    public override async Task HandleAsync(Request request,CancellationToken ct)
+    public override async Task HandleAsync(Request request, CancellationToken ct)
     {
-        var users = await _db.GetPaginatedUsers(request.Search,request.Page, request.PageSize,ct);
+        var users = await _db.GetPaginatedUsers(request.Search, request.Page, request.PageSize, ct);
         var totalEntries = await _db.GetTotalEntries(request.Search, ct);
-        
+
         await SendOkAsync(new Response
         {
             Entries = users.Select(MapUser),
             Page = request.Page,
-            TotalPages =  totalEntries / request.PageSize + (totalEntries % request.PageSize is 0 ? 0 : 1)
+            TotalPages = totalEntries / request.PageSize + (totalEntries % request.PageSize is 0 ? 0 : 1)
         }, ct);
     }
 
     private static UserResponse MapUser(User user)
     {
         var roles = user.Roles.Select(MapRole);
-        return new UserResponse(user.Id, user.Name, user.Email, user.Phone,roles);
+        return new UserResponse(user.Id, user.Name, user.Email, user.Phone, roles);
     }
 
-    private static RoleResponse MapRole(Role role) => new(role.Service.ToString(), role.CanWrite, role.CanRead);
-    
+    private static RoleResponse MapRole(Role role)
+    {
+        return new(role.Service.ToString(), role.CanWrite, role.CanRead);
+    }
 }

@@ -17,7 +17,7 @@ public class RequestValidator : Validator<Request>
             .EmailAddress().WithMessage("Debe ser un email.")
             .MinimumLength(5).WithMessage("Debe tener como mínimo 5 caracteres.")
             .MaximumLength(100).WithMessage("Debe tener como máximo 100 caracteres.");
-        
+
         RuleFor(t => t.Password)
             .MaximumLength(50).WithMessage("Debe tener como máximo 50 caracteres.")
             .MinimumLength(8).WithMessage("Debe tener como mínimo 8 caracteres.")

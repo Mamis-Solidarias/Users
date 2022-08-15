@@ -8,8 +8,10 @@ internal class DbAccess
 {
     private readonly UsersDbContext? _dbContext;
 
-    public DbAccess(){}
-    
+    public DbAccess()
+    {
+    }
+
     public DbAccess(UsersDbContext? dbContext)
     {
         _dbContext = dbContext;
@@ -19,7 +21,7 @@ internal class DbAccess
     {
         ArgumentNullException.ThrowIfNull(_dbContext);
         return await _dbContext.Users
-            .Include(t=> t.Roles)
-            .FirstOrDefaultAsync(t => t.Email == email,ct);
+            .Include(t => t.Roles)
+            .FirstOrDefaultAsync(t => t.Email == email, ct);
     }
 }

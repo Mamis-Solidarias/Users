@@ -6,7 +6,7 @@ public partial class UsersClient
 {
     public async Task<Response?> CreateUser(Request parameters, CancellationToken token = default)
     {
-        return await CreateRequest<Response>(HttpMethod.Post,"users")
+        return await CreateRequest<Response>(HttpMethod.Post, "users")
             .WithContent(parameters)
             .ExecuteAsync(token);
     }

@@ -3,22 +3,21 @@ using MamisSolidarias.Infrastructure.Users;
 using MamisSolidarias.Infrastructure.Users.Models;
 using MamisSolidarias.WebAPI.Users.Extensions;
 
-namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.GET;
+namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Roles.GET;
 
 internal class Endpoint : Endpoint<Request, Response>
 {
     private readonly DbAccess _db;
 
+    public Endpoint(UsersDbContext dbContext, DbAccess? db = null)
+    {
+        _db = db ?? new DbAccess(dbContext);
+    }
+
     public override void Configure()
     {
-        Get("users/{id}");
+        Get("users/{id}/roles");
     }
-
-    public Endpoint(UsersDbContext? dbContext, DbAccess? dbAccess = null)
-    {
-        _db = dbAccess ?? new DbAccess(dbContext);
-    }
-
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
@@ -36,17 +35,9 @@ internal class Endpoint : Endpoint<Request, Response>
             return;
         }
 
-        await SendOkAsync(new Response {User = MapUser(user)}, ct);
+        await SendOkAsync(new Response {Roles = MapRoles(user.Roles)}, ct);
     }
 
-    private static UserResponse MapUser(User user)
-    {
-        var roles = user.Roles.Select(MapRole);
-        return new UserResponse(user.Id, user.Name, user.Email, user.Phone, roles);
-    }
-
-    private static RoleResponse MapRole(Role role)
-    {
-        return new(role.Service.ToString(), role.CanWrite, role.CanRead);
-    }
+    private static IEnumerable<RoleResponse> MapRoles(IEnumerable<Role> roles)
+        => roles.Select(t => new RoleResponse(t.Service.ToString(), t.CanWrite, t.CanRead));
 }

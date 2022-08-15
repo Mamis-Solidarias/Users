@@ -22,7 +22,7 @@ internal class RoleTypeConfiguration : IEntityTypeConfiguration<Role>
     {
         builder.HasKey(t => t.Id);
         builder.Property(t => t.Id).ValueGeneratedOnAdd();
-        
+
         builder.Property(t => t.Service)
             .HasConversion<int>()
             .IsRequired();
@@ -34,4 +34,3 @@ internal class RoleTypeConfiguration : IEntityTypeConfiguration<Role>
             .HasDefaultValue(false);
     }
 }
-
