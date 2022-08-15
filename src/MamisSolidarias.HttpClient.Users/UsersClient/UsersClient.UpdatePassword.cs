@@ -1,4 +1,4 @@
-using MamisSolidarias.WebAPI.Users.Endpoints.Users.Password.PUT;
+using MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Password.PUT;
 
 namespace MamisSolidarias.HttpClient.Users.UsersClient;
 
