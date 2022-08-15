@@ -1,7 +1,7 @@
 using FastEndpoints;
 using FluentValidation;
 
-namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.Password.PUT;
+namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Password.PUT;
 
 public class Request
 {

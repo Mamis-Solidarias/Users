@@ -3,7 +3,7 @@ using FastEndpoints.Security;
 using MamisSolidarias.Infrastructure.Users;
 using MamisSolidarias.WebAPI.Users.Services;
 
-namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.Password.PUT;
+namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Password.PUT;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 internal class Endpoint : Endpoint<Request>

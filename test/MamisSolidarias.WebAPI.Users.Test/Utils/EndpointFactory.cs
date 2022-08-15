@@ -11,6 +11,31 @@ internal static class EndpointFactory
     /// It creates a fake endpoint with added services
     /// </summary>
     /// <param name="addServices">Function to add new Services, such as ILogger or any other dependency injected service</param>
+    /// <param name="user">User claims to mock</param>
+    /// <param name="dependencies">Constructor parameters</param>
+    /// <typeparam name="TEndpoint">Endpoint class</typeparam>
+    /// <typeparam name="TRequest">Request clas</typeparam>
+    /// <typeparam name="TResponse">Response class</typeparam>
+    /// <returns></returns>
+    public static TEndpoint CreateEndpointWithClaims<TEndpoint, TRequest, TResponse>(
+        Action<ServiceCollection>? addServices,
+        ClaimsPrincipal user,
+        params object?[]? dependencies
+    )
+        where TEndpoint : Endpoint<TRequest, TResponse> where TRequest : notnull, new() where TResponse : notnull, new()
+    {
+        return Factory.Create<TEndpoint>(ctx =>
+        {
+            ctx.HttpContext.User = user;
+            var services = new ServiceCollection();
+            addServices?.Invoke(services);
+            ctx.RequestServices = services.BuildServiceProvider();
+        },dependencies);
+    }
+    /// <summary>
+    /// It creates a fake endpoint with added services
+    /// </summary>
+    /// <param name="addServices">Function to add new Services, such as ILogger or any other dependency injected service</param>
     /// <param name="dependencies">Constructor parameters</param>
     /// <typeparam name="TEndpoint">Endpoint class</typeparam>
     /// <typeparam name="TRequest">Request clas</typeparam>

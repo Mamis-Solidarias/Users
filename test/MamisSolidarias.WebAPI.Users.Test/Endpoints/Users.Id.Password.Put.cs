@@ -6,7 +6,7 @@ using FastEndpoints;
 using FastEndpoints.Security;
 using FluentAssertions;
 using MamisSolidarias.Infrastructure.Users.Models;
-using MamisSolidarias.WebAPI.Users.Endpoints.Users.Password.PUT;
+using MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Password.PUT;
 using MamisSolidarias.WebAPI.Users.Services;
 using MamisSolidarias.WebAPI.Users.Utils;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +17,7 @@ using NUnit.Framework;
 namespace MamisSolidarias.WebAPI.Users.Endpoints;
 
 // ReSharper disable once InconsistentNaming
-internal class Users_Password_Put
+internal class Users_Id_Password_Put
 {
     private readonly Mock<ILogger<Endpoint<Request>>> _mockLogger = new();
     private readonly Mock<TextHasher> _mockedTextHasher = new() {CallBase = true};

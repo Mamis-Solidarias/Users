@@ -25,7 +25,7 @@ internal class Users_Get
     {
         _endpoint = EndpointFactory.CreateEndpoint<Endpoint, Request, Response>(
             s => s.AddSingleton(_mockLogger.Object),
-             null,_mockDbService.Object
+            null,_mockDbService.Object
         );
     }
 

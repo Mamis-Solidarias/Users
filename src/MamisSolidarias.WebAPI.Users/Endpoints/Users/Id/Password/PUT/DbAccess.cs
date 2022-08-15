@@ -2,7 +2,7 @@ using MamisSolidarias.Infrastructure.Users;
 using MamisSolidarias.Infrastructure.Users.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.Password.PUT;
+namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Password.PUT;
 
 internal class DbAccess
 {

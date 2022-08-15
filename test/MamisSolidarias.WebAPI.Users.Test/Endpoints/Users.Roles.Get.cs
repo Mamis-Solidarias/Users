@@ -41,6 +41,6 @@ internal class Users_Roles_Get
         response.Should().NotBeNull();
         response.Roles.Count().Should().Be(services.Length);
         response.Roles.Select(t => t.Service).Should().BeEquivalentTo(services);
-        response.Roles.Should().Satisfy(t => t.CanRead && t.CanRead);
+        response.Roles.Should().Satisfy(t => t.CanRead && t.CanWrite);
     }
 }
