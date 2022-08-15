@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 #pragma warning disable CS8618
 
 namespace MamisSolidarias.Infrastructure.Users.Models;
@@ -22,7 +23,7 @@ internal class UserTypeConfiguration : IEntityTypeConfiguration<User>
         builder.Property(t => t.Id)
             .ValueGeneratedOnAdd()
             .IsRequired();
-        
+
         builder.HasKey(t => t.Id);
 
         builder.Property(t => t.Name)
@@ -35,15 +36,15 @@ internal class UserTypeConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasIndex(t => t.Email)
             .IsUnique();
-        
+
         builder.Property(t => t.Email)
             .IsUnicode()
             .HasMaxLength(100)
             .IsRequired();
-        
+
         builder.HasIndex(t => t.Phone)
             .IsUnique();
-        
+
         builder.Property(t => t.Phone)
             .HasMaxLength(100)
             .IsRequired();
@@ -52,6 +53,5 @@ internal class UserTypeConfiguration : IEntityTypeConfiguration<User>
             .IsRequired();
 
         builder.HasMany(t => t.Roles);
-
     }
-} 
+}

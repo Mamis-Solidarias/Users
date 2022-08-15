@@ -33,7 +33,7 @@ internal class ReadyRequest<TResponse>
         response.EnsureSuccessStatusCode();
         return await response.Content.ReadFromJsonAsync<TResponse>(cancellationToken: token);
     }
-    
+
     /// <summary>
     /// It adds query parameters to the request
     /// </summary>
@@ -42,11 +42,12 @@ internal class ReadyRequest<TResponse>
     public ReadyRequest<TResponse> WithQuery(params (string Key, string? Value)[] parameters)
     {
         ArgumentNullException.ThrowIfNull(_requestMessage.RequestUri);
-        var query = string.Join('&', parameters.Where(t=> t.Value is not null).Select(t => $"{t.Key}={t.Value}"));
+        var query = string.Join('&', parameters.Where(t => t.Value is not null).Select(t => $"{t.Key}={t.Value}"));
         _requestMessage.RequestUri = new Uri(_requestMessage.RequestUri, $"?{query}");
         return this;
     }
 }
+
 /// <summary>
 /// Wrapper object to apply policies to requests without a response
 /// </summary>
@@ -73,7 +74,7 @@ internal class ReadyRequest
         var response = await _client.SendAsync(_requestMessage, token);
         response.EnsureSuccessStatusCode();
     }
-    
+
     /// <summary>
     /// It adds query parameters to the request
     /// </summary>
@@ -82,9 +83,8 @@ internal class ReadyRequest
     public ReadyRequest WithQuery(params (string Key, string? Value)[] parameters)
     {
         ArgumentNullException.ThrowIfNull(_requestMessage.RequestUri);
-        var query = string.Join('&', parameters.Where(t=> t.Value is not null).Select(t => $"{t.Key}={t.Value}"));
+        var query = string.Join('&', parameters.Where(t => t.Value is not null).Select(t => $"{t.Key}={t.Value}"));
         _requestMessage.RequestUri = new Uri(_requestMessage.RequestUri, $"?{query}");
         return this;
     }
 }
-

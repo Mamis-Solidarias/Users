@@ -1,6 +1,6 @@
 using FastEndpoints;
-using FastEndpoints.Security;
 using MamisSolidarias.Infrastructure.Users;
+using MamisSolidarias.WebAPI.Users.Extensions;
 using MamisSolidarias.WebAPI.Users.Services;
 
 namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Password.PUT;
@@ -24,10 +24,7 @@ internal class Endpoint : Endpoint<Request>
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        var isUserAdmin = User.HasPermission("Users/write");
-        var isUserOwnerOfAccount = User.Claims.Any(t=> t.Type is "Id" && int.Parse(t.Value) == req.Id);
-
-        if (!isUserAdmin && !isUserOwnerOfAccount)
+        if (!User.HasPermissionOrIsAccountOwner("Users/write",req.Id))
         {
             await SendForbiddenAsync(ct);
             return;

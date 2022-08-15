@@ -9,5 +9,4 @@ public partial class UsersClient
         return CreateRequest<Response>(HttpMethod.Get, "users", "roles")
             .ExecuteAsync(token);
     }
-
 }

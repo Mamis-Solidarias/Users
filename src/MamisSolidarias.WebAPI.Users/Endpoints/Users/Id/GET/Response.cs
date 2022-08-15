@@ -7,4 +7,4 @@ public class Response
 
 public record RoleResponse(string Service, bool CanWrite, bool CanRead);
 
-public record UserResponse(int Id,string Name, string Email, string Phone, IEnumerable<RoleResponse> Roles);
+public record UserResponse(int Id, string Name, string Email, string Phone, IEnumerable<RoleResponse> Roles);

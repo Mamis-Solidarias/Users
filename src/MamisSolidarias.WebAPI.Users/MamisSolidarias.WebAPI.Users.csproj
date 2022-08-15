@@ -12,8 +12,8 @@
         <PackageReference Include="FastEndpoints.Security" Version="4.4.0" />
         <PackageReference Include="FastEndpoints.Swagger" Version="4.4.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="OpenTelemetry" Version="1.3.0" />
         <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.3.0" />
@@ -26,7 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MamisSolidarias.Infrastructure.Users\MamisSolidarias.Infrastructure.Users.csproj" />
+        <ProjectReference Include="..\MamisSolidarias.Infrastructure.Users\MamisSolidarias.Infrastructure.Users.csproj" />
     </ItemGroup>
 
 </Project>
