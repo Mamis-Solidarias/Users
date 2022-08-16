@@ -2,6 +2,7 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using FastEndpoints.Security;
 using FluentAssertions;
 using MamisSolidarias.Infrastructure.Users.Models;
 using MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.DELETE;
