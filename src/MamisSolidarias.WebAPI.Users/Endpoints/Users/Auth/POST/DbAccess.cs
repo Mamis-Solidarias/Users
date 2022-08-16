@@ -22,6 +22,6 @@ internal class DbAccess
         ArgumentNullException.ThrowIfNull(_dbContext);
         return await _dbContext.Users
             .Include(t => t.Roles)
-            .FirstOrDefaultAsync(t => t.Email == email, ct);
+            .FirstOrDefaultAsync(t => t.IsActive && t.Email == email, ct);
     }
 }

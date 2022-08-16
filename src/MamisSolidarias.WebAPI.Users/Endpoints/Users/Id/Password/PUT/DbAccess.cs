@@ -16,7 +16,7 @@ internal class DbAccess
     public virtual Task<User?> FindUserById(int id,CancellationToken ct)
     {
         ArgumentNullException.ThrowIfNull(_dbContext);
-        return _dbContext.Users.FirstOrDefaultAsync(t => t.Id == id,ct);
+        return _dbContext.Users.FirstOrDefaultAsync(t => t.IsActive && t.Id == id,ct);
     }
 
     public virtual async Task UpdatePassword(User user, string newPassword, CancellationToken ct)

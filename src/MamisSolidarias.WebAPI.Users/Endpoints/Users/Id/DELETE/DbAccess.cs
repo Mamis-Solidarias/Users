@@ -24,7 +24,7 @@ internal class DbAccess
     public async Task SoftDeleteUser(User user, CancellationToken token)
     {
         ArgumentNullException.ThrowIfNull(_dbContext);
-        _dbContext.Users.Remove(user);
+        user.IsActive = false;
         await _dbContext.SaveChangesAsync(token);
     }
 }
