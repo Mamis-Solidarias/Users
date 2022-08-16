@@ -79,7 +79,6 @@ internal static class EndpointFactory
     /// It creates a fake endpoint without response with added services
     /// </summary>
     /// <param name="addServices">Function to add new Services, such as ILogger or any other dependency injected service</param>
-    /// <param name="user">User claims to mock</param>
     /// <param name="dependencies">Constructor parameters</param>
     /// <typeparam name="TEndpoint">Endpoint class</typeparam>
     /// <typeparam name="TRequest">Request clas</typeparam>
