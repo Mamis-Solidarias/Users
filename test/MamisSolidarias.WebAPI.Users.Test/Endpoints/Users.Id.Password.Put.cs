@@ -28,7 +28,7 @@ internal class Users_Id_Password_Put
     [SetUp]
     public void Setup()
     {
-        _endpoint = EndpointFactory.CreateEndpointWithoutResponse<Endpoint, Request>(
+        _endpoint = EndpointFactory.CreateEndpointWithoutResponseWithClaims<Endpoint, Request>(
             s => s.AddSingleton(_mockLogger.Object),
             user: _mockClaims.Object,
             _mockedTextHasher.Object,null, _mockDbAccess.Object

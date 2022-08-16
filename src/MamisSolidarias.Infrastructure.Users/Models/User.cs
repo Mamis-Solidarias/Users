@@ -14,6 +14,8 @@ internal class User
     public string Password { get; set; }
     public string Salt { get; set; }
     public ICollection<Role> Roles { get; set; }
+
+    public bool? IsActive { get; set; }
 }
 
 internal class UserTypeConfiguration : IEntityTypeConfiguration<User>
@@ -51,6 +53,9 @@ internal class UserTypeConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(t => t.Salt)
             .IsRequired();
+
+        builder.Property(t => t.IsActive)
+            .HasDefaultValue(true);
 
         builder.HasMany(t => t.Roles);
     }

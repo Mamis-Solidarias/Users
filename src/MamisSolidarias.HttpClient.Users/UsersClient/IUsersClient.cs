@@ -21,4 +21,6 @@ public interface IUsersClient
 
     Task<WebAPI.Users.Endpoints.Users.Id.Roles.GET.Response?> GetUsersRoles(
         WebAPI.Users.Endpoints.Users.Id.Roles.GET.Request request, CancellationToken token = default);
+
+    Task DeleteUser(WebAPI.Users.Endpoints.Users.Id.DELETE.Request request, CancellationToken token = default);
 }
