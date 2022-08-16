@@ -15,13 +15,13 @@ internal class DbAccess
 
     public DbAccess() { }
 
-    public Task<User?> GetUserById(int id, CancellationToken token)
+    public virtual Task<User?> GetUserById(int id, CancellationToken token)
     {
         ArgumentNullException.ThrowIfNull(_dbContext);
-        return _dbContext.Users.FirstOrDefaultAsync(t => t.IsActive && t.Id == id,token);
+        return _dbContext.Users.FirstOrDefaultAsync(t => t.IsActive == true && t.Id == id,token);
     }
 
-    public async Task SoftDeleteUser(User user, CancellationToken token)
+    public virtual async Task SoftDeleteUser(User user, CancellationToken token)
     {
         ArgumentNullException.ThrowIfNull(_dbContext);
         user.IsActive = false;

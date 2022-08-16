@@ -20,6 +20,6 @@ internal class DbAccess
         ArgumentNullException.ThrowIfNull(_dbContext);
         return _dbContext.Users
             .Include(t => t.Roles)
-            .FirstOrDefaultAsync(t=> t.IsActive && t.Id == id,ct);
+            .FirstOrDefaultAsync(t=> t.IsActive == true && t.Id == id,ct);
     }
 }

@@ -23,7 +23,8 @@ internal static class DataFactory
         .RuleFor(t => t.Email, (f, u) => f.Internet.Email(u.Name))
         .RuleFor(t => t.Phone, f => f.Phone.PhoneNumber("+549##########"))
         .RuleFor(t => t.Salt, f => Convert.ToBase64String(f.Random.Bytes(16)))
-        .RuleFor(t => t.Roles,t=> RoleGenerator.Generate(t.Random.Int(1,AvailableServices)));
+        .RuleFor(t => t.Roles,t=> RoleGenerator.Generate(t.Random.Int(1,AvailableServices)))
+        .RuleFor(t=> t.IsActive, t=> true);
 
     public static User GetUser()
     {

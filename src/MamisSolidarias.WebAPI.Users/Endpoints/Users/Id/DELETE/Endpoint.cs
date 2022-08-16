@@ -1,5 +1,6 @@
 using FastEndpoints;
 using MamisSolidarias.Infrastructure.Users;
+using MamisSolidarias.WebAPI.Users.Extensions;
 
 namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.DELETE;
 
@@ -20,6 +21,13 @@ internal class Endpoint : Endpoint<Request>
 
     public override async Task HandleAsync(Request request, CancellationToken ct)
     {
+        if (request.Id == User.GetUserId()) 
+        {
+            AddError("Un usuario no puede eliminarse a si mismo!");
+            await SendErrorsAsync(cancellation: ct);
+            return;
+        }
+        
         var user = await _db.GetUserById(request.Id, ct);
         if (user is null)
         {

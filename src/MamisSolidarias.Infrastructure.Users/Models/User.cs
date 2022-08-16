@@ -15,7 +15,7 @@ internal class User
     public string Salt { get; set; }
     public ICollection<Role> Roles { get; set; }
 
-    public bool IsActive { get; set; } = true;
+    public bool? IsActive { get; set; }
 }
 
 internal class UserTypeConfiguration : IEntityTypeConfiguration<User>
