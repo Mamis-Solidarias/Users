@@ -45,16 +45,7 @@ internal class Endpoint : Endpoint<Request, Response>
             Service = Enum.Parse<Infrastructure.Users.Models.Services>(t.Service)
         }).ToList();
 
-        try
-        {
-            await _db.SaveChanges(ct);
-        }
-        catch (DbUpdateException)
-        {
-            AddError("Sucedio un error al crear al usuario");
-            await SendErrorsAsync(cancellation: ct);
-            return;
-        }
+        await _db.SaveChanges(ct);
         
         await SendOkAsync(new Response
         {

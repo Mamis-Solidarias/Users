@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FastEndpoints;
 using FastEndpoints.Security;
 using FluentAssertions;
+using MamisSolidarias.Infrastructure.Users.Models;
 using MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Roles.PUT;
 using MamisSolidarias.WebAPI.Users.Utils;
 using Microsoft.Extensions.DependencyInjection;
@@ -111,7 +112,7 @@ internal class Users_Id_Roles_Put
     }
     
     [Test]
-    public async Task WithInvalidParameters_AsAccountOwner_Succeeds()
+    public async Task WithValidParameters_AsAccountOwner_Succeeds()
     {
         // Arrange
         var user = DataFactory.GetUser();
@@ -142,5 +143,54 @@ internal class Users_Id_Roles_Put
         response.Roles.Count().Should().Be(0);
     }
     
+    [Test]
+    public async Task WithInvalidParameters_NoPermission_Fails()
+    {
+        // Arrange
+        var user = DataFactory.GetUser();
+        var claims = Array.Empty<Claim>();
+        
+        _mockClaims.SetupGet(t => t.Identities)
+            .Returns(new[] {new ClaimsIdentity(claims)});
+        
+
+        var request = new Request
+        {
+            Id = user.Id,
+            Roles = ArraySegment<RoleRequest>.Empty
+        };
+        
+        // Act
+        await _endpoint.HandleAsync(request, default);
+        
+        // Assert
+        _endpoint.HttpContext.Response.StatusCode.Should().Be(403);
+    }
     
+    [Test]
+    public async Task WithInvalidParameters_UserDoesNotExists_Fails()
+    {
+        // Arrange
+        var user = DataFactory.GetUser();
+        var claims = new[] {new Claim(Constants.PermissionsClaimType,"Users/write")};
+        
+        _mockClaims.SetupGet(t => t.Identities)
+            .Returns(new[] {new ClaimsIdentity(claims)});
+        
+        _mockDbAccess.Setup(t => t.GetUserById(It.Is<int>(r=> r == user.Id), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((User?) null);
+        
+
+        var request = new Request
+        {
+            Id = user.Id,
+            Roles = ArraySegment<RoleRequest>.Empty
+        };
+        
+        // Act
+        await _endpoint.HandleAsync(request, default);
+        
+        // Assert
+        _endpoint.HttpContext.Response.StatusCode.Should().Be(404);
+    }
 }
