@@ -40,5 +40,10 @@ public interface IUsersClient
     Task<MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.PATCH.Response?> UpdateUser(
         MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.PATCH.Request request,
         CancellationToken token = default
-        );
+    );
+
+    Task<MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Roles.PUT.Response?> UpdateRoles(
+        MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Roles.PUT.Request request,
+        CancellationToken token = default
+    );
 }
