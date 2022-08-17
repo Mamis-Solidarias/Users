@@ -1,11 +1,18 @@
 using FastEndpoints;
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Roles.PUT;
 
 public class Request
 {
-    public int Id { get; set; }
+    /// <summary>
+    /// The user's ID
+    /// </summary>
+    [FromQuery] public int Id { get; set; }
+    /// <summary>
+    /// The new roles
+    /// </summary>
     public IEnumerable<RoleRequest> Roles { get; set; } = ArraySegment<RoleRequest>.Empty;
 }
 

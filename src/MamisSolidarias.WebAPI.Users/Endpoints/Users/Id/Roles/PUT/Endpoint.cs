@@ -20,16 +20,11 @@ internal class Endpoint : Endpoint<Request, Response>
     public override void Configure()
     {
         Put("users/{id}/roles");
+        Policies(Services.Policies.Names.CanWrite.ToString());
     }
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        if (!User.HasPermissionOrIsAccountOwner("Users/write", req.Id))
-        {
-            await SendForbiddenAsync(ct);
-            return;
-        }
-
         var user = await _db.GetUserById(req.Id, ct);
 
         if (user is null)

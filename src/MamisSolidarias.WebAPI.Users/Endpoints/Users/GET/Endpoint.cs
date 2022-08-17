@@ -18,20 +18,6 @@ internal class Endpoint : Endpoint<Request, Response>
     {
         Get("users");
         Policies(Services.Policies.Names.CanRead.ToString());
-        Summary(summary =>
-        {
-            summary.Summary = "This endpoint returns basic used information using pagination";
-            summary.ExampleRequest = new Request
-            {
-                Search = "paula",
-                PageSize = 25,
-                Page = 3
-            };
-            summary.Response<Response>();
-            summary.Response(400, "Invalid parameters");
-            summary.Response(403, "The user does not have the necessary privileges");
-            summary.Response(401);
-        });
     }
 
     public override async Task HandleAsync(Request request, CancellationToken ct)
