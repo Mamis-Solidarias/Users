@@ -20,7 +20,7 @@ internal static class MiddlewareRegistrator
             db.Database.Migrate();
         }
 
-        if (app.Environment.IsDevelopment())
+        if (!app.Environment.IsProduction())
         {
             app.UseOpenApi();
             app.UseSwaggerUi3(t => t.ConfigureDefaults());

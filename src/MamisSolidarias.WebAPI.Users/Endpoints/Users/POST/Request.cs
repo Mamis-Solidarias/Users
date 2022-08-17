@@ -5,9 +5,21 @@ namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.POST;
 
 public class Request
 {
+    /// <summary>
+    /// The email of the new user
+    /// </summary>
     public string Email { get; set; } = string.Empty;
+    /// <summary>
+    /// The name of the new user
+    /// </summary>
     public string Name { get; set; } = string.Empty;
+    /// <summary>
+    /// The phone of the user
+    /// </summary>
     public string Phone { get; set; } = string.Empty;
+    /// <summary>
+    /// The password of the user
+    /// </summary>
     public string Password { get; set; } = string.Empty;
 }
 

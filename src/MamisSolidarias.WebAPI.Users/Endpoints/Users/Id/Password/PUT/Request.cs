@@ -1,13 +1,23 @@
 using FastEndpoints;
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Password.PUT;
 
 public class Request
 {
     
-    public int Id { get; set; }
+    /// <summary>
+    /// Id of the user to change the password
+    /// </summary>
+    [FromRoute] public int Id { get; set; }
+    /// <summary>
+    /// The current password of the user
+    /// </summary>
     public string OldPassword { get; set; } = string.Empty;
+    /// <summary>
+    /// The new password of the user
+    /// </summary>
     public string NewPassword { get; set; } = string.Empty;
 }
 

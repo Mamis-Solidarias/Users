@@ -47,11 +47,7 @@ internal class Users_Id_Roles_Put
     {
         // Arrange
         var user = DataFactory.GetUser();
-        var claims = new[] {new Claim(Constants.PermissionsClaimType,"Users/write")};
-        
-        _mockClaims.SetupGet(t => t.Identities)
-            .Returns(new[] {new ClaimsIdentity(claims)});
-        
+
         _mockDbAccess.Setup(t => t.GetUserById(It.Is<int>(r=> r == user.Id), It.IsAny<CancellationToken>()))
             .ReturnsAsync(user);
 
@@ -84,11 +80,7 @@ internal class Users_Id_Roles_Put
     {
         // Arrange
         var user = DataFactory.GetUser();
-        var claims = new[] {new Claim(Constants.PermissionsClaimType,"Users/write")};
-        
-        _mockClaims.SetupGet(t => t.Identities)
-            .Returns(new[] {new ClaimsIdentity(claims)});
-        
+
         _mockDbAccess.Setup(t => t.GetUserById(It.Is<int>(r=> r == user.Id), It.IsAny<CancellationToken>()))
             .ReturnsAsync(user);
 
@@ -110,73 +102,13 @@ internal class Users_Id_Roles_Put
         response.Should().NotBeNull();
         response.Roles.Count().Should().Be(0);
     }
-    
-    [Test]
-    public async Task WithValidParameters_AsAccountOwner_Succeeds()
-    {
-        // Arrange
-        var user = DataFactory.GetUser();
-        var claims = new[] {new Claim("Id",$"{user.Id}")};
-        
-        _mockClaims.SetupGet(t => t.Identities)
-            .Returns(new[] {new ClaimsIdentity(claims)});
-        
-        _mockDbAccess.Setup(t => t.GetUserById(It.Is<int>(r=> r == user.Id), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(user);
 
-        _mockDbAccess.Setup(t => t.SaveChanges(It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
-
-        var request = new Request
-        {
-            Id = user.Id,
-            Roles = ArraySegment<RoleRequest>.Empty
-        };
-        
-        // Act
-        await _endpoint.HandleAsync(request, default);
-        var response = _endpoint.Response;
-        
-        // Assert
-        _endpoint.HttpContext.Response.StatusCode.Should().Be(200);
-        response.Should().NotBeNull();
-        response.Roles.Count().Should().Be(0);
-    }
-    
-    [Test]
-    public async Task WithInvalidParameters_NoPermission_Fails()
-    {
-        // Arrange
-        var user = DataFactory.GetUser();
-        var claims = Array.Empty<Claim>();
-        
-        _mockClaims.SetupGet(t => t.Identities)
-            .Returns(new[] {new ClaimsIdentity(claims)});
-        
-
-        var request = new Request
-        {
-            Id = user.Id,
-            Roles = ArraySegment<RoleRequest>.Empty
-        };
-        
-        // Act
-        await _endpoint.HandleAsync(request, default);
-        
-        // Assert
-        _endpoint.HttpContext.Response.StatusCode.Should().Be(403);
-    }
-    
     [Test]
     public async Task WithInvalidParameters_UserDoesNotExists_Fails()
     {
         // Arrange
         var user = DataFactory.GetUser();
-        var claims = new[] {new Claim(Constants.PermissionsClaimType,"Users/write")};
-        
-        _mockClaims.SetupGet(t => t.Identities)
-            .Returns(new[] {new ClaimsIdentity(claims)});
-        
+
         _mockDbAccess.Setup(t => t.GetUserById(It.Is<int>(r=> r == user.Id), It.IsAny<CancellationToken>()))
             .ReturnsAsync((User?) null);
         

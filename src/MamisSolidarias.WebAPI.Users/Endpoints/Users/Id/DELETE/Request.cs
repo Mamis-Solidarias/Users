@@ -1,6 +1,11 @@
+using Microsoft.AspNetCore.Mvc;
+
 namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.DELETE;
 
 public class Request
 {
-    public int Id { get; set; }
+    /// <summary>
+    /// Id of the user to delete
+    /// </summary>
+    [FromRoute] public int Id { get; set; }
 }

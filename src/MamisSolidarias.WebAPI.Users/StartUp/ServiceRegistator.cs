@@ -57,6 +57,9 @@ internal static class ServiceRegistrator
         builder.Services.AddScoped<ITextHasher, TextHasher>();
 
         if (!builder.Environment.IsProduction())
-            builder.Services.AddSwaggerDoc(tagIndex: 1, shortSchemaNames: true);
+            builder.Services.AddSwaggerDoc(t =>
+            {
+                t.Title = "Users";
+            });
     }
 }

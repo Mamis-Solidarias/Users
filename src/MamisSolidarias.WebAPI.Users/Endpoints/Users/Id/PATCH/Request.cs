@@ -1,13 +1,26 @@
 using FastEndpoints;
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.PATCH;
 
 public class Request
 {
-    public int Id { get; set; }
+    /// <summary>
+    /// The user's ID
+    /// </summary>
+    [FromRoute] public int Id { get; set; }
+    /// <summary>
+    /// Optional: new email
+    /// </summary>
     public string? Email { get; set; }
+    /// <summary>
+    /// Optional: new Name
+    /// </summary>
     public string? Name { get; set; }
+    /// <summary>
+    /// Optional: new Phone
+    /// </summary>
     public string? Phone { get; set; }
 }
 
