@@ -6,13 +6,13 @@ public partial class UsersClient
 {
     public Task<Response?> UpdateUser(Request request, CancellationToken token = default)
     {
-        return CreateRequest<Response>(HttpMethod.Patch, "users", $"{request.Id}")
+        return CreateRequest(HttpMethod.Patch, "users", $"{request.Id}")
             .WithContent(new
             {
                 request.Email,
                 request.Name,
                 request.Phone
             })
-            .ExecuteAsync(token);
+            .ExecuteAsync<Response>(token);
     }
 }
