@@ -61,5 +61,7 @@ internal static class ServiceRegistrator
             {
                 t.Title = "Users";
             });
+
+        builder.Services.AddCors();
     }
 }
