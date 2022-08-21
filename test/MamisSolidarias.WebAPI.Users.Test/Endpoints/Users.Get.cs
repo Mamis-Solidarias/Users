@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using FastEndpoints;
 using FluentAssertions;
 using MamisSolidarias.Infrastructure.Users.Models;
+using MamisSolidarias.Utils.Test;
 using MamisSolidarias.WebAPI.Users.Endpoints.Users.GET;
 using MamisSolidarias.WebAPI.Users.Utils;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -23,10 +23,9 @@ internal class Users_Get
     [SetUp]
     public void Setup()
     {
-        _endpoint = EndpointFactory.CreateEndpoint<Endpoint, Request, Response>(
-            s => s.AddSingleton(_mockLogger.Object),
-            null,_mockDbService.Object
-        );
+        _endpoint = EndpointFactory
+            .CreateEndpoint<Endpoint>(null,_mockDbService.Object)
+            .Build();
     }
 
     [TearDown]

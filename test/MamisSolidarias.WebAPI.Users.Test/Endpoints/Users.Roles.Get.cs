@@ -1,13 +1,9 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using FastEndpoints;
 using FluentAssertions;
+using MamisSolidarias.Utils.Test;
 using MamisSolidarias.WebAPI.Users.Endpoints.Users.Roles.GET;
-using MamisSolidarias.WebAPI.Users.Utils;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Moq;
 using NUnit.Framework;
 
 namespace MamisSolidarias.WebAPI.Users.Endpoints;
@@ -15,15 +11,14 @@ namespace MamisSolidarias.WebAPI.Users.Endpoints;
 // ReSharper disable once InconsistentNaming
 internal class Users_Roles_Get
 {
-    private readonly Mock<ILogger<EndpointWithoutRequest<Response>>> _mockLogger = new();
     private Endpoint _endpoint = null!;
 
     [SetUp]
     public void Setup()
     {
-        _endpoint = EndpointFactory.CreateEndpointWithoutRequest<Endpoint, Response>(
-            s => s.AddSingleton(_mockLogger.Object)
-        );
+        _endpoint = EndpointFactory
+            .CreateEndpoint<Endpoint>()
+            .Build();
     }
 
     [Test]

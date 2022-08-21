@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using FastEndpoints;
 using FluentAssertions;
 using MamisSolidarias.Infrastructure.Users.Models;
+using MamisSolidarias.Utils.Test;
 using MamisSolidarias.WebAPI.Users.Endpoints.Users.POST;
 using MamisSolidarias.WebAPI.Users.Services;
 using MamisSolidarias.WebAPI.Users.Utils;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -26,10 +26,9 @@ internal class Users_Post
     [SetUp]
     public void Setup()
     {
-        _endpoint = EndpointFactory.CreateEndpoint<Endpoint, Request, Response>(
-            s => s.AddSingleton(_mockLogger.Object),
-            _textHasher, null,_mockDbService.Object
-        );
+        _endpoint = EndpointFactory
+            .CreateEndpoint<Endpoint>(_textHasher, null,_mockDbService.Object)
+            .Build();
     }
 
     [TearDown]
