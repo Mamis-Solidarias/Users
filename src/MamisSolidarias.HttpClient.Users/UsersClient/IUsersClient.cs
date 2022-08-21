@@ -46,4 +46,9 @@ public interface IUsersClient
         MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Roles.PUT.Request request,
         CancellationToken token = default
     );
+
+    Task ActivateUser(
+        MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.POST.Request request,
+        CancellationToken token = default
+    );
 }
