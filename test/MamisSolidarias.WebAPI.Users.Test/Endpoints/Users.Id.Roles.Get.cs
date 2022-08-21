@@ -6,9 +6,9 @@ using FastEndpoints;
 using FastEndpoints.Security;
 using FluentAssertions;
 using MamisSolidarias.Infrastructure.Users.Models;
+using MamisSolidarias.Utils.Test;
 using MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Roles.GET;
 using MamisSolidarias.WebAPI.Users.Utils;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -26,11 +26,10 @@ internal class Users_Id_Roles_Get
     [SetUp]
     public void Setup()
     {
-        _endpoint = EndpointFactory.CreateEndpointWithClaims<Endpoint, Request,Response>(
-            s => s.AddSingleton(_mockLogger.Object),
-            user: _mockClaims.Object,
-            null, _mockDbAccess.Object
-        );
+        _endpoint = EndpointFactory
+            .CreateEndpoint<Endpoint>(null, _mockDbAccess.Object)
+            .WithClaims(_mockClaims.Object)
+            .Build();
     }
 
     [TearDown]

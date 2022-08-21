@@ -6,7 +6,7 @@ public partial class UsersClient
 {
     public Task<Response?> GetUsersRoles(Request request, CancellationToken token = default)
     {
-        return CreateRequest<Response>(HttpMethod.Get, "users", $"{request.Id}", "roles")
-            .ExecuteAsync(token);
+        return CreateRequest(HttpMethod.Get, "users", $"{request.Id}", "roles")
+            .ExecuteAsync<Response>(token);
     }
 }

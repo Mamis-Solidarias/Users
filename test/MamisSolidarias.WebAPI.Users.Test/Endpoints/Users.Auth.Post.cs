@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 using FastEndpoints;
 using FluentAssertions;
 using MamisSolidarias.Infrastructure.Users.Models;
+using MamisSolidarias.Utils.Test;
 using MamisSolidarias.WebAPI.Users.Endpoints.Users.Auth.POST;
 using MamisSolidarias.WebAPI.Users.Services;
 using MamisSolidarias.WebAPI.Users.Utils;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -41,10 +41,9 @@ internal class Users_Auth_Post
             .AddInMemoryCollection(inMemorySettings)
             .Build();
         
-        _endpoint = EndpointFactory.CreateEndpoint<Endpoint, Request, Response>(
-            s => s.AddSingleton(_mockLogger.Object),
-            null,_mockedTextHasher.Object, config, _mockDbAccess.Object
-        );
+        _endpoint = EndpointFactory
+            .CreateEndpoint<Endpoint>(null,_mockedTextHasher.Object, config, _mockDbAccess.Object)
+            .Build();
     }
 
     [TearDown]

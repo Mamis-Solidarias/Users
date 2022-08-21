@@ -1,9 +1,7 @@
 using FastEndpoints;
-using FastEndpoints.Security;
 using MamisSolidarias.Infrastructure.Users;
 using MamisSolidarias.Infrastructure.Users.Models;
-using MamisSolidarias.WebAPI.Users.Extensions;
-using Microsoft.EntityFrameworkCore;
+
 
 namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Roles.PUT;
 

@@ -6,10 +6,10 @@ using FastEndpoints;
 using FastEndpoints.Security;
 using FluentAssertions;
 using MamisSolidarias.Infrastructure.Users.Models;
+using MamisSolidarias.Utils.Test;
 using MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Password.PUT;
 using MamisSolidarias.WebAPI.Users.Services;
 using MamisSolidarias.WebAPI.Users.Utils;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -28,11 +28,10 @@ internal class Users_Id_Password_Put
     [SetUp]
     public void Setup()
     {
-        _endpoint = EndpointFactory.CreateEndpointWithoutResponseWithClaims<Endpoint, Request>(
-            s => s.AddSingleton(_mockLogger.Object),
-            user: _mockClaims.Object,
-            _mockedTextHasher.Object,null, _mockDbAccess.Object
-        );
+        _endpoint = EndpointFactory
+            .CreateEndpoint<Endpoint>(_mockedTextHasher.Object, null, _mockDbAccess.Object)
+            .WithClaims(_mockClaims.Object)
+            .Build();
     }
 
     [TearDown]
