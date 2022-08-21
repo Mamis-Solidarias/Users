@@ -36,7 +36,7 @@ internal class Endpoint : Endpoint<Request, Response>
     private static UserResponse MapUser(User user)
     {
         var roles = user.Roles.Select(MapRole);
-        return new UserResponse(user.Id, user.Name, user.Email, user.Phone, roles);
+        return new UserResponse(user.Id, user.Name, user.Email, user.Phone,user.IsActive ?? true, roles);
     }
 
     private static RoleResponse MapRole(Role role)

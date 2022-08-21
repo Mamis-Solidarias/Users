@@ -103,7 +103,8 @@ internal class Users_Get
         return user.Email == response.Email &&
                user.Id == response.Id &&
                user.Name == response.Name &&
-               user.Phone == response.Phone
+               user.Phone == response.Phone &&
+               user.IsActive == response.IsActive
         &&
         user.Roles.All(t=> 
             response.Roles.SingleOrDefault(r => 
