@@ -23,9 +23,9 @@ internal class DbAccess
         var query = _dbContext.Users.Select(t => t);
 
         if (!string.IsNullOrEmpty(search))
-            query.Where(t => t.Email.Contains(search) || t.Name.Contains(search) || t.Phone.Contains(search));
+            query = query.Where(t => t.Email.Contains(search) || t.Name.Contains(search) || t.Phone.Contains(search));
 
-        return query.Where(t=> t.IsActive== true).CountAsync(ct);
+        return query.CountAsync(ct);
     }
 
     public virtual async Task<IEnumerable<User>> GetPaginatedUsers(string? search, int page, int pageSize,
@@ -39,8 +39,8 @@ internal class DbAccess
             .Select(t => t);
 
         if (!string.IsNullOrEmpty(search))
-            query.Where(t => t.Email.Contains(search) || t.Name.Contains(search) || t.Phone.Contains(search));
+            query = query.Where(t => t.Email.Contains(search) || t.Name.Contains(search) || t.Phone.Contains(search));
 
-        return await query.Where(t=> t.IsActive== true).AsNoTracking().ToListAsync(ct);
+        return await query.AsNoTracking().ToListAsync(ct);
     }
 }

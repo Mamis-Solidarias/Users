@@ -19,7 +19,9 @@ internal class DbAccess
     public virtual Task<User?> GetUserById(int id, CancellationToken ct)
     {
         ArgumentNullException.ThrowIfNull(_dbContext);
-        return _dbContext.Users.FirstOrDefaultAsync(t => t.IsActive == true && t.Id == id, ct);
+        return _dbContext.Users
+            .Include(t=>t.Roles)
+            .FirstOrDefaultAsync(t => t.IsActive == true && t.Id == id, ct);
     }
 
     public virtual Task SaveChanges(CancellationToken ct)
