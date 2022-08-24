@@ -11,7 +11,7 @@ internal class Description : Summary<Endpoint>
         {
             Id = 123,
             Roles = 
-                Enum.GetValues<Infrastructure.Users.Models.Services>()
+                Enum.GetValues<Utils.Security.Services>()
                     .Select(t=> new RoleRequest(t.ToString(),true,false))
         };
         Response<Response>(200,"The updated roles");

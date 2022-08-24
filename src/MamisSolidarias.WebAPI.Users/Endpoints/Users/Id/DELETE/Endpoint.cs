@@ -1,6 +1,6 @@
 using FastEndpoints;
 using MamisSolidarias.Infrastructure.Users;
-using MamisSolidarias.WebAPI.Users.Extensions;
+using MamisSolidarias.Utils.Security;
 
 namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.DELETE;
 
@@ -16,7 +16,7 @@ internal class Endpoint : Endpoint<Request>
     public override void Configure()
     {
         Delete("users/{id}");
-        Policies(Services.Policies.Names.CanWrite.ToString());
+        Policies(Utils.Security.Services.Users.WritePermission());
     }
 
     public override async Task HandleAsync(Request request, CancellationToken ct)

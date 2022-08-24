@@ -1,5 +1,6 @@
 using FastEndpoints;
 using MamisSolidarias.Infrastructure.Users;
+using MamisSolidarias.Utils.Security;
 
 namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.POST;
 
@@ -7,7 +8,7 @@ internal class Endpoint : Endpoint<Request>
 {
     private readonly DbAccess _db;
 
-    public Endpoint(UsersDbContext dbContext,DbAccess? db = null)
+    public Endpoint(UsersDbContext? dbContext,DbAccess? db = null)
     {
         _db = db ?? new DbAccess(dbContext);
     }
@@ -15,7 +16,7 @@ internal class Endpoint : Endpoint<Request>
     public override void Configure()
     {
         Post("users/{id}");
-        Policies(Services.Policies.Names.CanWrite.ToString());
+        Policies(Utils.Security.Services.Users.WritePermission());
     }
 
     public override async Task HandleAsync(Request req, CancellationToken ct)

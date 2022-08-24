@@ -6,6 +6,7 @@ using MamisSolidarias.WebAPI.Users.Services;
 using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using MamisSolidarias.Utils.Security;
 
 namespace MamisSolidarias.WebAPI.Users.StartUp;
 
@@ -41,12 +42,10 @@ internal static class ServiceRegistrator
 
         builder.Services.AddFastEndpoints();
         builder.Services.AddAuthenticationJWTBearer(builder.Configuration["JWT:Key"]);
+        
         builder.Services.AddAuthorization(t =>
         {
-            t.AddPolicy(Policies.Names.All.ToString(), policy => policy.ConfigurePolicy(Policies.Names.All));
-            t.AddPolicy(Policies.Names.CanRead.ToString(), policy => policy.ConfigurePolicy(Policies.Names.CanRead));
-            t.AddPolicy(Policies.Names.CanWrite.ToString(), policy => policy.ConfigurePolicy(Policies.Names.CanWrite));
-
+            t.ConfigurePolicies(Utils.Security.Services.Users);
         });
         builder.Services.AddDbContext<UsersDbContext>(
             t => 

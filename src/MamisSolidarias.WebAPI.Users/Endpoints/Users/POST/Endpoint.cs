@@ -1,6 +1,7 @@
 using FastEndpoints;
 using MamisSolidarias.Infrastructure.Users;
 using MamisSolidarias.Infrastructure.Users.Models;
+using MamisSolidarias.Utils.Security;
 using MamisSolidarias.WebAPI.Users.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,7 +21,7 @@ internal class Endpoint : Endpoint<Request, Response>
     public override void Configure()
     {
         Post("users");
-        Policies(Services.Policies.Names.CanWrite.ToString());
+        Policies(Utils.Security.Services.Users.WritePermission());
     }
     
     public override async Task HandleAsync(Request req, CancellationToken ct)

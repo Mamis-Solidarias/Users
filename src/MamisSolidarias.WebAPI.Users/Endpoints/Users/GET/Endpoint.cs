@@ -1,6 +1,7 @@
 using FastEndpoints;
 using MamisSolidarias.Infrastructure.Users;
 using MamisSolidarias.Infrastructure.Users.Models;
+using MamisSolidarias.Utils.Security;
 
 namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.GET;
 
@@ -17,7 +18,7 @@ internal class Endpoint : Endpoint<Request, Response>
     public override void Configure()
     {
         Get("users");
-        Policies(Services.Policies.Names.CanRead.ToString());
+        Policies(Utils.Security.Services.Users.ReadPermission());
     }
 
     public override async Task HandleAsync(Request request, CancellationToken ct)

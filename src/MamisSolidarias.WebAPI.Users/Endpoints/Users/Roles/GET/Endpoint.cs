@@ -1,5 +1,5 @@
 using FastEndpoints;
-
+using MamisSolidarias.Utils.Security;
 namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.Roles.GET;
 
 internal class Endpoint : EndpointWithoutRequest<Response>
@@ -7,12 +7,12 @@ internal class Endpoint : EndpointWithoutRequest<Response>
     public override void Configure()
     {
         Get("users/roles");
-        Policies(Services.Policies.Names.CanRead.ToString());
+        Policies( Utils.Security.Services.Users.ReadPermission());
     }
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var roles = Enum.GetValues<Infrastructure.Users.Models.Services>()
+        var roles = Enum.GetValues<Utils.Security.Services>()
             .Select(t => new RoleResponse(t.ToString(), true, true));
         
         await SendOkAsync(new Response { Roles = roles }, ct);
