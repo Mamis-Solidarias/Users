@@ -23,7 +23,7 @@ internal class RoleRequestValidator : Validator<RoleRequest>
     public RoleRequestValidator()
     {
         RuleFor(t => t.Service)
-            .IsEnumName(typeof(Infrastructure.Users.Models.Services))
+            .IsEnumName(typeof(Utils.Security.Services))
             .WithMessage("Rol Inválido");
     }
 }

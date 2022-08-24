@@ -6,10 +6,10 @@ namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.POST;
 
 internal class DbAccess
 {
-    private readonly UsersDbContext _dbContext;
+    private readonly UsersDbContext? _dbContext;
     public DbAccess() { }
 
-    public DbAccess(UsersDbContext dbContext)
+    public DbAccess(UsersDbContext? dbContext)
     {
         _dbContext = dbContext;
     }

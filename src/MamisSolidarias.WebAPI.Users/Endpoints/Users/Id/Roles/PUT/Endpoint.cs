@@ -1,6 +1,7 @@
 using FastEndpoints;
 using MamisSolidarias.Infrastructure.Users;
 using MamisSolidarias.Infrastructure.Users.Models;
+using MamisSolidarias.Utils.Security;
 
 
 namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Roles.PUT;
@@ -13,12 +14,11 @@ internal class Endpoint : Endpoint<Request, Response>
     {
         _db = db ?? new DbAccess(dbContext);
     }
-
-
+    
     public override void Configure()
     {
         Put("users/{id}/roles");
-        Policies(Services.Policies.Names.CanWrite.ToString());
+        Policies(Utils.Security.Services.Users.WritePermission());
     }
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
@@ -35,7 +35,7 @@ internal class Endpoint : Endpoint<Request, Response>
         {
             CanRead = t.CanRead,
             CanWrite = t.CanWrite,
-            Service = Enum.Parse<Infrastructure.Users.Models.Services>(t.Service)
+            Service = Enum.Parse<Utils.Security.Services>(t.Service)
         }).ToList();
 
         await _db.SaveChanges(ct);

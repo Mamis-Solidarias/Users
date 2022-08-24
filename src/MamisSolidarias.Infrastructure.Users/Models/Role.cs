@@ -1,12 +1,9 @@
+using MamisSolidarias.Utils.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace MamisSolidarias.Infrastructure.Users.Models;
 
-public enum Services
-{
-    Users
-}
 
 internal class Role
 {

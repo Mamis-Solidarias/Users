@@ -8,11 +8,11 @@ namespace MamisSolidarias.WebAPI.Users.Utils;
 
 internal static class DataFactory
 {
-    private static readonly int AvailableServices = Enum.GetNames<Infrastructure.Users.Models.Services>().Length;
+    private static readonly int AvailableServices = Enum.GetNames<MamisSolidarias.Utils.Security.Services>().Length;
     
     private static readonly Faker<Role> RoleGenerator = new Faker<Role>()
             .RuleFor(t=> t.Id, t=> t.Random.Int(0))
-            .RuleFor(t=> t.Service, t=> t.PickRandom<Infrastructure.Users.Models.Services>())
+            .RuleFor(t=> t.Service, t=> t.PickRandom<MamisSolidarias.Utils.Security.Services>())
             .RuleFor(t=> t.CanRead, t=> t.Random.Bool())
             .RuleFor(t=> t.CanWrite,t=> t.Random.Bool());
 

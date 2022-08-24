@@ -1,6 +1,6 @@
 using FastEndpoints;
 using MamisSolidarias.Infrastructure.Users;
-using MamisSolidarias.WebAPI.Users.Extensions;
+using MamisSolidarias.Utils.Security;
 using Microsoft.EntityFrameworkCore;
 
 namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.PATCH;
@@ -21,7 +21,7 @@ internal class Endpoint : Endpoint<Request,Response>
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        if (!User.HasPermissionOrIsAccountOwner("Users/write", req.Id))
+        if (!User.HasPermissionOrIsAccountOwner(Utils.Security.Services.Users.WritePermission(), req.Id))
         {
             await SendForbiddenAsync(ct);
             return;

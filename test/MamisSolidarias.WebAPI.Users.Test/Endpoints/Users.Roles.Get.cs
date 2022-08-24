@@ -25,7 +25,7 @@ internal class Users_Roles_Get
     public async Task WithValidParameters_Succeeds()
     {
         // Arrange
-        var services = Enum.GetValues<Infrastructure.Users.Models.Services>()
+        var services = Enum.GetValues<MamisSolidarias.Utils.Security.Services>()
             .Select(t => t.ToString())
             .ToArray();
         // Act
@@ -36,6 +36,5 @@ internal class Users_Roles_Get
         response.Should().NotBeNull();
         response.Roles.Count().Should().Be(services.Length);
         response.Roles.Select(t => t.Service).Should().BeEquivalentTo(services);
-        response.Roles.Should().Satisfy(t => t.CanRead && t.CanWrite);
     }
 }
