@@ -1,4 +1,4 @@
-﻿FROM --platform=linux/amd64 mcr.microsoft.com/dotnet/runtime-deps:6.0-alpine  AS base
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0-alpine  AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
