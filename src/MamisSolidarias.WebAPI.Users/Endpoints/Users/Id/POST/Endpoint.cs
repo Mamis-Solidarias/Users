@@ -16,7 +16,7 @@ internal class Endpoint : Endpoint<Request>
     public override void Configure()
     {
         Post("users/{id}");
-        Policies(Utils.Security.Services.Users.WritePermission());
+        Policies(Utils.Security.Policies.CanWrite);
     }
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
