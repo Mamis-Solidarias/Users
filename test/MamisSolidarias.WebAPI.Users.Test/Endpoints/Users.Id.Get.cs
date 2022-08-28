@@ -64,12 +64,9 @@ internal class Users_Id_Get
         response.User.Email.Should().Be(user.Email);
         response.User.Name.Should().Be(user.Name);
         response.User.Phone.Should().Be(user.Phone);
-        user.Roles.All(t =>
-            response.User.Roles.SingleOrDefault(r =>
-                r.Service == t.Service.ToString() &&
-                r.CanRead == t.CanRead &&
-                r.CanWrite == t.CanWrite
-            ) is not null).Should().BeTrue();
+        response.User.Roles.Select(t => (t.Service.ToString(), t.CanRead, t.CanWrite))
+            .Should().BeEquivalentTo(user.Roles.Select(t => (t.Service.ToString(), t.CanRead, t.CanWrite)));
+
     }
 
     [Test]
@@ -96,12 +93,8 @@ internal class Users_Id_Get
         response.User.Email.Should().Be(user.Email);
         response.User.Name.Should().Be(user.Name);
         response.User.Phone.Should().Be(user.Phone);
-        user.Roles.All(t =>
-            response.User.Roles.SingleOrDefault(r =>
-                r.Service == t.Service.ToString() &&
-                r.CanRead == t.CanRead &&
-                r.CanWrite == t.CanWrite
-            ) is not null).Should().BeTrue();
+        response.User.Roles.Select(t => (t.Service.ToString(), t.CanRead, t.CanWrite))
+            .Should().BeEquivalentTo(user.Roles.Select(t => (t.Service.ToString(), t.CanRead, t.CanWrite)));
     }
     
     [Test]

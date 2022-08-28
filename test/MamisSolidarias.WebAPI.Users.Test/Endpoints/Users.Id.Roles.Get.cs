@@ -92,12 +92,11 @@ internal class Users_Id_Roles_Get
         // Assert
         _endpoint.HttpContext.Response.StatusCode.Should().Be(200);
         response.Should().NotBeNull();
-        user.Roles.All(t =>
-            response.Roles.SingleOrDefault(r =>
-                r.Service == t.Service.ToString() &&
-                r.CanRead == t.CanRead &&
-                r.CanWrite == t.CanWrite
-            ) is not null).Should().BeTrue();
+        response.Roles.Should().BeEquivalentTo(
+            user.Roles.Select(t =>
+                new RoleResponse(t.Service.ToString(), t.CanWrite, t.CanRead)
+            )
+        );
     }
 
     [Test]
