@@ -66,7 +66,11 @@ internal class Users_Auth_Post
             Password = user.Password
         };
 
-        _mockDbAccess.Setup(t => t.FindUserByEmail(It.Is<string>(r => r == user.Email),It.IsAny<CancellationToken>()))
+        _mockDbAccess.Setup(t => t.FindUserByEmail(It.Is<string>(
+                r => r == user.Email.ToLowerInvariant().Trim()),
+                It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync(user);
 
         _mockedTextHasher.Setup(t => t.Hash(It.IsAny<string>(),It.IsAny<byte[]>()))
@@ -120,8 +124,13 @@ internal class Users_Auth_Post
     {
         // Arrange
         var user = DataFactory.GetUser();
-        _mockDbAccess.Setup(t => t.FindUserByEmail(It.Is<string>(r=> r == user.Email),It.IsAny<CancellationToken>()))
+        _mockDbAccess.Setup(t => t.FindUserByEmail(
+                It.Is<string>(r=> r == user.Email.ToLowerInvariant().Trim()),
+                It.IsAny<CancellationToken>()
+                )
+            )
             .ReturnsAsync(user);
+        
         _mockedTextHasher.Setup(t => t.Hash(It.IsAny<string>(),It.IsAny<byte[]>()))
             .Returns((Convert.FromBase64String(user.Salt), "other password"));
         var request = new Request
