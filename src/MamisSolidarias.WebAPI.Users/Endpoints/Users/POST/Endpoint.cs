@@ -26,14 +26,15 @@ internal class Endpoint : Endpoint<Request, Response>
     
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
+        req.Email = req.Email.Trim().ToLowerInvariant();
         var (salt, hash) = _textHasher.Hash(req.Password);
 
         var user = new User
         {
             Email = req.Email,
             Password = hash,
-            Name = req.Name,
-            Phone = req.Phone,
+            Name = req.Name.Trim(),
+            Phone = req.Phone.Trim(),
             Salt = Convert.ToBase64String(salt)
         };
         try

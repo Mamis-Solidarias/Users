@@ -28,6 +28,7 @@ internal class Endpoint : Endpoint<Request, Response>
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
+        req.Email = req.Email.Trim().ToLowerInvariant();
         var user = await _dbAccess.FindUserByEmail(req.Email, ct);
 
         if (user is null)

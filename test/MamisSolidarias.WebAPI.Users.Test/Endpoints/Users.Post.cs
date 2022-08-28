@@ -51,7 +51,10 @@ internal class Users_Post
             Phone = user.Phone
         };
 
-        _mockDbService.Setup(t => t!.AddUser(It.IsAny<User>(), It.IsAny<CancellationToken>()))
+        _mockDbService.Setup(t => t!.AddUser(
+                It.IsAny<User>(), It.IsAny<CancellationToken>()
+                )
+            )
             .Returns((User us, CancellationToken _) =>
             {
                 us.Id = 1;
@@ -66,7 +69,7 @@ internal class Users_Post
         _endpoint.ValidationFailed.Should().BeFalse();
         response.Name.Should().Be(user.Name);
         response.Id.Should().BePositive();
-        response.Email.Should().Be(user.Email);
+        response.Email.Should().Be(user.Email.ToLowerInvariant().Trim());
         response.Phone.Should().Be(user.Phone);
     }
 
@@ -83,7 +86,11 @@ internal class Users_Post
             Phone = user.Phone
         };
         
-        _mockDbService.Setup(t => t.AddUser(It.Is<User>(r=> r.Email == user.Email), It.IsAny<CancellationToken>()))
+        _mockDbService.Setup(t => t.AddUser(
+                It.Is<User>(r=> r.Email == user.Email.ToLowerInvariant().Trim()), 
+                It.IsAny<CancellationToken>()
+                )
+            )
             .Throws<DbUpdateException>();
 
         // act
@@ -108,7 +115,11 @@ internal class Users_Post
             Phone = user.Phone
         };
         
-        _mockDbService.Setup(t => t.AddUser(It.Is<User>(r=> r.Phone == user.Phone), It.IsAny<CancellationToken>()))
+        _mockDbService.Setup(t => t.AddUser(
+                It.Is<User>(r=> r.Phone == user.Phone.Trim()), 
+                It.IsAny<CancellationToken>()
+                )
+            )
             .Throws<DbUpdateException>();
 
         // act
