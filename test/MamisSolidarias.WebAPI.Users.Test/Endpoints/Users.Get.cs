@@ -60,10 +60,12 @@ internal class Users_Get
         
         // Assert
         response.Should().NotBeNull();
-        foreach (var entry in response.Entries)
-        {
-            users.Should().ContainSingle(t => AreUsersEqual(t,entry));
-        }
+
+        response.Entries.Should().BeEquivalentTo(users.Select(t=> 
+            new UserResponse(t.Id,t.Name,t.Email,t.Phone,t.IsActive ?? true, t.Roles.Select(r=>
+                new RoleResponse(r.Service.ToString(),r.CanWrite,r.CanRead)))
+            )
+        );
         response.Page.Should().Be(0);
         response.TotalPages.Should().Be(3);
     }

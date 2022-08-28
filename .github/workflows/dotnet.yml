@@ -3,8 +3,20 @@ name: .NET
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - .github/workflows/docker-publish.yml
+      - MamisSolidarias.Users.sln
+      - src/**
+      - test/**
+      - !src/MamisSolidarias.WebAPI.Users/Dockerfile
   pull_request:
     branches: [ "main" ]
+    paths:
+      - .github/workflows/docker-publish.yml
+      - MamisSolidarias.Users.sln
+      - src/**
+      - test/**
+      - !src/MamisSolidarias.WebAPI.Users/Dockerfile
 
 jobs:
   build:

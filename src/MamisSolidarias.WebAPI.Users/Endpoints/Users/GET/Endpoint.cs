@@ -18,7 +18,7 @@ internal class Endpoint : Endpoint<Request, Response>
     public override void Configure()
     {
         Get("users");
-        Policies(Utils.Security.Services.Users.ReadPermission());
+        Policies(Utils.Security.Policies.CanRead);
     }
 
     public override async Task HandleAsync(Request request, CancellationToken ct)

@@ -7,7 +7,7 @@ internal class Endpoint : EndpointWithoutRequest<Response>
     public override void Configure()
     {
         Get("users/roles");
-        Policies( Utils.Security.Services.Users.ReadPermission());
+        Policies( Utils.Security.Policies.CanRead);
     }
 
     public override async Task HandleAsync(CancellationToken ct)
