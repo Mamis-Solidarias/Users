@@ -8,7 +8,7 @@ on:
       - MamisSolidarias.Users.sln
       - src/**
       - test/**
-      - !src/MamisSolidarias.WebAPI.Users/Dockerfile
+
   pull_request:
     branches: [ "main" ]
     paths:
