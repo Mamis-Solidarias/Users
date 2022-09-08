@@ -24,13 +24,6 @@ internal static class ServiceRegistrator
         builder.Services.AddOpenTelemetryTracing(tracerProviderBuilder =>
         {
             tracerProviderBuilder
-                .AddConsoleExporter()
-                // .AddOtlpExporter(opt =>
-                // {
-                //     opt.Endpoint = new Uri("https://otlp.nr-data.net");
-                //     opt.Headers["api-key"] = "";
-                //     opt.Protocol = OtlpExportProtocol.HttpProtobuf;
-                // })
                 .AddSource(builder.Configuration["Service:Name"])
                 .SetResourceBuilder(
                     ResourceBuilder.CreateDefault()
@@ -38,6 +31,13 @@ internal static class ServiceRegistrator
                 .AddHttpClientInstrumentation()
                 .AddAspNetCoreInstrumentation()
                 .AddEntityFrameworkCoreInstrumentation();
+
+            if (!builder.Environment.IsProduction())
+            {
+                tracerProviderBuilder
+                    .AddConsoleExporter()
+                    .AddJaegerExporter();
+            }
         });
 
         builder.Services.AddFastEndpoints();
