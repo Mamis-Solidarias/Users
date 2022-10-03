@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [ "main" ]
     paths:
-      - MamisSolidarias.HttpClient.Users/**
+      - src/MamisSolidarias.HttpClient.Users/**
       - MamisSolidarias.Users.sln
 
 
