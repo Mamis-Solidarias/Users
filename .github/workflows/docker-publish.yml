@@ -8,6 +8,10 @@ name: Docker
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - src/MamisSolidarias.Infrastructure.Users/**
+      - src/MamisSolidarias.WebAPI.Users/**
+      - MamisSolidarias.Users.sln
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
   pull_request:
