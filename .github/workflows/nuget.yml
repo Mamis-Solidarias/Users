@@ -5,6 +5,7 @@ on:
     paths:
       - src/MamisSolidarias.HttpClient.Users/**
       - .github/workflows/nuget.yml
+  workflow_dispatch:
 jobs:
   publish:
     name: build, pack & publish
