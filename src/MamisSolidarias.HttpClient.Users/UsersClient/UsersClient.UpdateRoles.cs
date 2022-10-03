@@ -1,16 +1,22 @@
-using MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Roles.PUT;
+using MamisSolidarias.HttpClient.Users.Models;
 
 namespace MamisSolidarias.HttpClient.Users.UsersClient;
 
 public partial class UsersClient
 {
-    public Task<Response?> UpdateRoles(Request request, CancellationToken token = default)
+    /// <inheritdoc />
+    public Task<UpdateRolesResponse?> UpdateRoles(int id,IEnumerable<Role> roles, CancellationToken token = default)
     {
-        return CreateRequest(HttpMethod.Put, "users", $"{request.Id}", "roles")
+        return CreateRequest(HttpMethod.Put, "users", $"{id}", "roles")
             .WithContent(new
             {
-                request.Roles
+                Roles = roles
             })
-            .ExecuteAsync<Response>(token);
+            .ExecuteAsync<UpdateRolesResponse>(token);
     }
+
+
+    /// <param name="Roles">New roles</param>
+    public sealed record UpdateRolesResponse(IEnumerable<Role> Roles);
+
 }

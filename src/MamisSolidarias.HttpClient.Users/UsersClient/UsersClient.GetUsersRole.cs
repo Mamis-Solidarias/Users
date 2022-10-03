@@ -1,12 +1,19 @@
-using MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Roles.GET;
+using MamisSolidarias.HttpClient.Users.Models;
+
 
 namespace MamisSolidarias.HttpClient.Users.UsersClient;
 
 public partial class UsersClient
 {
-    public Task<Response?> GetUsersRoles(Request request, CancellationToken token = default)
+    /// <inheritdoc />
+    public Task<GetUsersRolesResponse?> GetUsersRoles(int id, CancellationToken token = default)
     {
-        return CreateRequest(HttpMethod.Get, "users", $"{request.Id}", "roles")
-            .ExecuteAsync<Response>(token);
+        return CreateRequest(HttpMethod.Get, "users", $"{id}", "roles")
+            .ExecuteAsync<GetUsersRolesResponse>(token);
     }
+    
+    /// <param name="Roles">Roles of the user</param>
+    public sealed record GetUsersRolesResponse(
+        IEnumerable<Role> Roles
+    );
 }
