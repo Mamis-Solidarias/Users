@@ -32,7 +32,6 @@ public static class ServiceCollectionExtensions
         {
             client.BaseAddress = new Uri(configuration.BaseUrl);
             client.Timeout = TimeSpan.FromMilliseconds(configuration.Timeout);
-            client.DefaultRequestHeaders.Add("Content-Type", "application/json");
 
             var contextAccessor = services.GetService<IHttpContextAccessor>();
             if (contextAccessor is not null)
