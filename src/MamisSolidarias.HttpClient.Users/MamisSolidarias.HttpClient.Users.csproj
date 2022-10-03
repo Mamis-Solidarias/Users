@@ -4,6 +4,11 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <Authors>MamisSolidarias</Authors>
+        <PackageProjectUrl>https://github.com/Mamis-Solidarias/Users</PackageProjectUrl>
+        <PackageVersion>1.0.0</PackageVersion>
+        <RepositoryUrl>https://github.com/Mamis-Solidarias/Users</RepositoryUrl>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
