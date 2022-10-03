@@ -1,0 +1,21 @@
+name: check-nuget-version
+
+# Controls when the workflow will run
+on:
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - MamisSolidarias.HttpClient.Users/**
+      - MamisSolidarias.Users.sln
+
+
+  workflow_dispatch:
+
+jobs:
+  check-nuget-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ldellisola/verify-nuget-package-version@v1.2.1
+        with:
+            PROJECT_FILE_PATH: 'src/MamisSolidarias.HttpClient.Users/MamisSolidarias.HttpClient.Users.csproj'
