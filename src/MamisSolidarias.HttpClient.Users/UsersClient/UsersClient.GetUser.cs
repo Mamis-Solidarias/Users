@@ -1,12 +1,17 @@
-using MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.GET;
+using MamisSolidarias.HttpClient.Users.Models;
 
 namespace MamisSolidarias.HttpClient.Users.UsersClient;
 
 public partial class UsersClient
 {
-    public Task<Response?> GetUser(Request request, CancellationToken token = default)
-    {
-        return CreateRequest(HttpMethod.Get, "users", request.Id.ToString())
-            .ExecuteAsync<Response>(token);
-    }
+    /// <inheritdoc />
+    public Task<GetUserResponse?> GetUser(int id, CancellationToken token = default) 
+        => CreateRequest(HttpMethod.Get, "users", id.ToString())
+            .ExecuteAsync<GetUserResponse>(token);
+
+
+    /// <param name="User">Expected user</param>
+    public sealed record GetUserResponse(User User);
+
+    
 }

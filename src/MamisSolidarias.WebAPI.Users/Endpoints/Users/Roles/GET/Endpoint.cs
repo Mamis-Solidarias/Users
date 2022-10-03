@@ -1,5 +1,4 @@
 using FastEndpoints;
-using MamisSolidarias.Utils.Security;
 namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.Roles.GET;
 
 internal class Endpoint : EndpointWithoutRequest<Response>

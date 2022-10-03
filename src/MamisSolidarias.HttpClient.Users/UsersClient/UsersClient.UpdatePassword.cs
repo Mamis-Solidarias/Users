@@ -1,12 +1,11 @@
-using MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Password.PUT;
-
 namespace MamisSolidarias.HttpClient.Users.UsersClient;
 
 public partial class UsersClient
 {
-    public async Task UpdatePassword(Request request, CancellationToken token = default)
+    /// <inheritdoc />
+    public async Task UpdatePassword(int id,UpdatePasswordRequest request, CancellationToken token = default)
     {
-        await CreateRequest(HttpMethod.Put, "users", request.Id.ToString(), "password")
+        await CreateRequest(HttpMethod.Put, "users", id.ToString(), "password")
             .WithContent(new
             {
                 request.OldPassword,
@@ -14,4 +13,8 @@ public partial class UsersClient
             })
             .ExecuteAsync(token);
     }
+
+    /// <param name="OldPassword">The current password of the user</param>
+    /// <param name="NewPassword">The new password of the user</param>
+    public sealed record UpdatePasswordRequest(string OldPassword, string NewPassword);
 }

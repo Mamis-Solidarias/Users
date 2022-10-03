@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
 using FluentAssertions;
-using MamisSolidarias.Infrastructure.Users.Models;
 using MamisSolidarias.Utils.Test;
 using MamisSolidarias.WebAPI.Users.Endpoints.Users.GET;
 using MamisSolidarias.WebAPI.Users.Utils;
@@ -99,25 +98,6 @@ internal class Users_Get
         response.Page.Should().Be(0);
         response.TotalPages.Should().Be(0);
     }
-
-    private static bool AreUsersEqual(User user, UserResponse response)
-    {
-        return user.Email == response.Email &&
-               user.Id == response.Id &&
-               user.Name == response.Name &&
-               user.Phone == response.Phone &&
-               user.IsActive == response.IsActive
-        &&
-        user.Roles.All(t=> 
-            response.Roles.SingleOrDefault(r => 
-                r.Service == t.Service.ToString() &&
-                r.CanRead == t.CanRead &&
-                r.CanWrite == t.CanWrite
-            ) is not null    
-        );
-    }
-    
-    
 }
 
 

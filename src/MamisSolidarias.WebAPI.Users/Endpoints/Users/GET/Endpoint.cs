@@ -1,7 +1,6 @@
 using FastEndpoints;
 using MamisSolidarias.Infrastructure.Users;
 using MamisSolidarias.Infrastructure.Users.Models;
-using MamisSolidarias.Utils.Security;
 
 namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.GET;
 
