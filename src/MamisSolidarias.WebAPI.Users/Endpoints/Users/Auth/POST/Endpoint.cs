@@ -45,10 +45,9 @@ internal class Endpoint : Endpoint<Request, Response>
         }
 
         ArgumentNullException.ThrowIfNull(_configuration);
-
+        
         var jwtToken = JWTBearer.CreateToken(
-            _configuration["JWT:Key"],
-            DateTime.UtcNow.AddDays(int.Parse(_configuration["JWT:ExpiresIn"])),
+            "This token is only used to create the cookie later",
             claims: new[] {("Email", user.Email), ("Id", user.Id.ToString()), ("Name", user.Name)},
             permissions: GetUserPermissions(user)
         );
