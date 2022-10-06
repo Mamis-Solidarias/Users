@@ -23,11 +23,11 @@ internal static class ServiceRegistrator
         builder.Services.AddOpenTelemetryTracing(tracerProviderBuilder =>
         {
             tracerProviderBuilder
-                .AddSource(builder.Configuration["Service:Name"])
+                .AddSource(builder.Configuration["OpenTelemetry:Service:Name"])
                 .SetResourceBuilder(
                     ResourceBuilder.CreateDefault()
-                        .AddService(builder.Configuration["Service:Name"],
-                            serviceVersion: builder.Configuration["Service:Version"]))
+                        .AddService(builder.Configuration["OpenTelemetry:Service:Name"],
+                            serviceVersion: builder.Configuration["OpenTelemetry:Service:Version"]))
                 .AddHttpClientInstrumentation()
                 .AddAspNetCoreInstrumentation()
                 .AddEntityFrameworkCoreInstrumentation();
@@ -35,7 +35,12 @@ internal static class ServiceRegistrator
             if (!builder.Environment.IsProduction())
                 tracerProviderBuilder
                     .AddConsoleExporter()
-                    .AddJaegerExporter();
+                    .AddJaegerExporter(t =>
+                    {
+                        var jaegerHost = builder.Configuration["OpenTelemetry:Jaeger:Host"];
+                        if (jaegerHost is not null)
+                            t.Endpoint = new Uri($"{jaegerHost}/api/traces");
+                    });
         });
 
         builder.Services.AddFastEndpoints();
