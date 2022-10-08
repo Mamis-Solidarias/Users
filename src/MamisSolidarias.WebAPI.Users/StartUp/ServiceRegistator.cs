@@ -1,12 +1,14 @@
 using FastEndpoints;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
+using HotChocolate.Diagnostics;
 using MamisSolidarias.Infrastructure.Users;
 using MamisSolidarias.WebAPI.Users.Services;
 using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using MamisSolidarias.Utils.Security;
+using MamisSolidarias.WebAPI.Users.Queries;
 
 namespace MamisSolidarias.WebAPI.Users.StartUp;
 
@@ -23,14 +25,19 @@ internal static class ServiceRegistrator
         builder.Services.AddOpenTelemetryTracing(tracerProviderBuilder =>
         {
             tracerProviderBuilder
-                .AddSource(builder.Configuration["OpenTelemetry:Service:Name"])
+                .AddSource(builder.Configuration["OpenTelemetry:Name"])
                 .SetResourceBuilder(
                     ResourceBuilder.CreateDefault()
-                        .AddService(builder.Configuration["OpenTelemetry:Service:Name"],
-                            serviceVersion: builder.Configuration["OpenTelemetry:Service:Version"]))
-                .AddHttpClientInstrumentation()
-                .AddAspNetCoreInstrumentation()
-                .AddEntityFrameworkCoreInstrumentation();
+                        .AddService(builder.Configuration["OpenTelemetry:Name"],
+                            serviceVersion: builder.Configuration["OpenTelemetry:Version"]))
+                .AddHttpClientInstrumentation(t=>
+                {
+                    t.RecordException = true;
+                    t.SetHttpFlavor= true;
+                })
+                .AddHotChocolateInstrumentation()
+                .AddAspNetCoreInstrumentation(t=> t.RecordException = true)
+                .AddEntityFrameworkCoreInstrumentation(t=> t.SetDbStatementForText = true);
 
             if (!builder.Environment.IsProduction())
                 tracerProviderBuilder
@@ -61,6 +68,18 @@ internal static class ServiceRegistrator
         if (!builder.Environment.IsProduction())
             builder.Services.AddSwaggerDoc(t => t.Title = "Users");
 
-        // builder.Services.AddCors();
+        builder.Services.AddGraphQLServer()
+            .AddQueryType<UsersQuery>()
+            .AddAuthorization()
+            .AddProjections()
+            .AddInstrumentation(t =>
+            {
+                t.Scopes = ActivityScopes.All;
+                t.IncludeDocument = true;
+                t.RequestDetails = RequestDetails.All;
+                t.RenameRootActivity = true;
+                t.IncludeDataLoaderKeys = true;
+            })
+            .PublishSchemaDefinition(t=> t.SetName($"{Utils.Security.Services.Users}gql"));
     }
 }

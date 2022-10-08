@@ -9,17 +9,11 @@ internal static class MiddlewareRegistrator
 {
     public static void Register(WebApplication app)
     {
-        // app.UseCors(t =>
-        // {
-        //     t.AllowAnyHeader();
-        //     t.AllowAnyOrigin();
-        //     t.AllowAnyMethod();
-        // });
-        
         app.UseDefaultExceptionHandler();
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseFastEndpoints();
+        app.MapGraphQL();
         
         using (var scope = app.Services.CreateScope())
         {
