@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace MamisSolidarias.Infrastructure.Users.Models;
 
-internal class User
+public class User
 {
     public int Id { get; set; }
     public string Name { get; set; }
     public string Email { get; set; }
     public string Phone { get; set; }
-    public string Password { get; set; }
-    public string Salt { get; set; }
+    internal string Password { get; set; }
+    internal string Salt { get; set; }
     public ICollection<Role> Roles { get; set; }
 
     public bool? IsActive { get; set; }

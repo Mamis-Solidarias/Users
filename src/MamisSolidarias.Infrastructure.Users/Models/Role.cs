@@ -4,8 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace MamisSolidarias.Infrastructure.Users.Models;
 
-
-internal class Role
+public class Role
 {
     public int Id { get; set; }
     public Services Service { get; set; }

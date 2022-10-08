@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MamisSolidarias.Infrastructure.Users;
 
-internal class UsersDbContext : DbContext
+public class UsersDbContext : DbContext
 {
     public DbSet<User> Users { get; set; }
 
