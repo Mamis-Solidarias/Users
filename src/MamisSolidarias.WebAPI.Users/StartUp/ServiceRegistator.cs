@@ -44,16 +44,21 @@ internal static class ServiceRegistrator
                     .AddConsoleExporter()
                     .AddJaegerExporter(t =>
                     {
-                        var jaegerHost = builder.Configuration["OpenTelemetry:Jaeger:Host"];
+                        var jaegerHost = builder.Configuration["OpenTelemetry:Jaeger:Endpoint"];
                         if (jaegerHost is not null)
-                            t.Endpoint = new Uri($"{jaegerHost}/api/traces");
+                        {
+                            Console.WriteLine("Using Jaeger endpoint: " + jaegerHost);
+                            t.Endpoint = new Uri(jaegerHost);
+                        }
+                        else
+                            Console.WriteLine("Using default jaeger endpoint");
                     });
         });
 
         builder.Services.AddFastEndpoints();
         builder.Services.AddAuthenticationJWTBearer(
-            builder.Configuration["JWT:Key"],
-            builder.Configuration["JWT:Issuer"]
+            builder.Configuration["Jwt:Key"],
+            builder.Configuration["Jwt:Issuer"]
         );
 
         builder.Services.AddAuthorization(t => t.ConfigurePolicies(Utils.Security.Services.Users));
@@ -61,6 +66,7 @@ internal static class ServiceRegistrator
             t =>
                 t.UseNpgsql(connectionString, r => r.MigrationsAssembly("MamisSolidarias.WebAPI.Users"))
                     .EnableSensitiveDataLogging(!builder.Environment.IsProduction())
+                    .EnableDetailedErrors(!builder.Environment.IsProduction())
         );
 
         builder.Services.AddScoped<ITextHasher, TextHasher>();
