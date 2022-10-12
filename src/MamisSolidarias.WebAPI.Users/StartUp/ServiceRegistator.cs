@@ -49,7 +49,7 @@ internal static class ServiceRegistrator
                             t.AgentHost = jaegerHost;
                     });
         });
-ß
+
         builder.Services.AddFastEndpoints();
         builder.Services.AddAuthenticationJWTBearer(
             builder.Configuration["Jwt:Key"],
