@@ -44,14 +44,9 @@ internal static class ServiceRegistrator
                     .AddConsoleExporter()
                     .AddJaegerExporter(t =>
                     {
-                        var jaegerHost = builder.Configuration["OpenTelemetry:Jaeger:Endpoint"];
+                        var jaegerHost = builder.Configuration["OpenTelemetry:Jaeger:Host"];
                         if (jaegerHost is not null)
-                        {
-                            Console.WriteLine("Using Jaeger endpoint: " + jaegerHost);
-                            t.Endpoint = new Uri(jaegerHost);
-                        }
-                        else
-                            Console.WriteLine("Using default jaeger endpoint");
+                            t.AgentHost = jaegerHost;
                     });
         });
 
