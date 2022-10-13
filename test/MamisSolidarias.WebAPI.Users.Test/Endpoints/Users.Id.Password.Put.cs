@@ -6,13 +6,13 @@ using FastEndpoints;
 using FastEndpoints.Security;
 using FluentAssertions;
 using MamisSolidarias.Infrastructure.Users.Models;
-using MamisSolidarias.Utils.Test;
 using MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Password.PUT;
 using MamisSolidarias.WebAPI.Users.Services;
 using MamisSolidarias.WebAPI.Users.Utils;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using EndpointFactory = MamisSolidarias.Utils.Test.EndpointFactory;
 
 namespace MamisSolidarias.WebAPI.Users.Endpoints;
 
