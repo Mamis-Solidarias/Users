@@ -57,6 +57,7 @@ internal static class ServiceRegistrator
         );
 
         builder.Services.AddAuthorization(t => t.ConfigurePolicies(Utils.Security.Services.Users));
+        
         builder.Services.AddDbContext<UsersDbContext>(
             t =>
                 t.UseNpgsql(connectionString, r => r.MigrationsAssembly("MamisSolidarias.WebAPI.Users"))
@@ -73,6 +74,7 @@ internal static class ServiceRegistrator
             .AddQueryType<UsersQuery>()
             .AddAuthorization()
             .AddProjections()
+            .RegisterDbContext<UsersDbContext>()
             .AddInstrumentation(t =>
             {
                 t.Scopes = ActivityScopes.All;
