@@ -11,6 +11,6 @@ public class UsersQuery
     [Authorize(Policy = "CanRead")]
     [UseFirstOrDefault]
     [UseProjection]
-    public IQueryable<User> GetUser([FromServices] UsersDbContext dbContext, int id)
+    public IQueryable<User> GetUser([FromServices] UsersDbContext dbContext, int? id)
         => dbContext.Users.Where(t => t.Id == id);
 }
