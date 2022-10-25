@@ -3,12 +3,13 @@ using FastEndpoints.Security;
 using FastEndpoints.Swagger;
 using HotChocolate.Diagnostics;
 using MamisSolidarias.Infrastructure.Users;
+using MamisSolidarias.Utils.Security;
+using MamisSolidarias.WebAPI.Users.Extensions;
+using MamisSolidarias.WebAPI.Users.Queries;
 using MamisSolidarias.WebAPI.Users.Services;
 using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using MamisSolidarias.Utils.Security;
-using MamisSolidarias.WebAPI.Users.Queries;
 
 namespace MamisSolidarias.WebAPI.Users.StartUp;
 
@@ -22,6 +23,8 @@ internal static class ServiceRegistrator
             _ => builder.Configuration.GetConnectionString("Development")
         };
 
+        builder.Services.AddDataProtection(builder.Configuration);
+
         builder.Services.AddOpenTelemetryTracing(tracerProviderBuilder =>
         {
             tracerProviderBuilder
@@ -30,10 +33,10 @@ internal static class ServiceRegistrator
                     ResourceBuilder.CreateDefault()
                         .AddService(builder.Configuration["OpenTelemetry:Name"],
                             serviceVersion: builder.Configuration["OpenTelemetry:Version"]))
-                .AddHttpClientInstrumentation(t=> t.RecordException = true)
+                .AddHttpClientInstrumentation(t => t.RecordException = true)
                 .AddHotChocolateInstrumentation()
-                .AddAspNetCoreInstrumentation(t=> t.RecordException = true)
-                .AddEntityFrameworkCoreInstrumentation(t=> t.SetDbStatementForText = true);
+                .AddAspNetCoreInstrumentation(t => t.RecordException = true)
+                .AddEntityFrameworkCoreInstrumentation(t => t.SetDbStatementForText = true);
 
             if (!builder.Environment.IsProduction())
                 tracerProviderBuilder
@@ -53,7 +56,7 @@ internal static class ServiceRegistrator
         );
 
         builder.Services.AddAuthorization(t => t.ConfigurePolicies(Utils.Security.Services.Users));
-        
+
         builder.Services.AddDbContext<UsersDbContext>(
             t =>
                 t.UseNpgsql(connectionString, r => r.MigrationsAssembly("MamisSolidarias.WebAPI.Users"))
@@ -79,6 +82,6 @@ internal static class ServiceRegistrator
                 t.RenameRootActivity = true;
                 t.IncludeDataLoaderKeys = true;
             })
-            .PublishSchemaDefinition(t=> t.SetName($"{Utils.Security.Services.Users}gql"));
+            .PublishSchemaDefinition(t => t.SetName($"{Utils.Security.Services.Users}gql"));
     }
 }
