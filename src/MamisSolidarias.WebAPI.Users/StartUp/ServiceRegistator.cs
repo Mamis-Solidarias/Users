@@ -24,30 +24,7 @@ internal static class ServiceRegistrator
         };
 
         builder.Services.AddDataProtection(builder.Configuration);
-
-        builder.Services.AddOpenTelemetryTracing(tracerProviderBuilder =>
-        {
-            tracerProviderBuilder
-                .AddSource(builder.Configuration["OpenTelemetry:Name"])
-                .SetResourceBuilder(
-                    ResourceBuilder.CreateDefault()
-                        .AddService(builder.Configuration["OpenTelemetry:Name"],
-                            serviceVersion: builder.Configuration["OpenTelemetry:Version"]))
-                .AddHttpClientInstrumentation(t => t.RecordException = true)
-                .AddHotChocolateInstrumentation()
-                .AddAspNetCoreInstrumentation(t => t.RecordException = true)
-                .AddEntityFrameworkCoreInstrumentation(t => t.SetDbStatementForText = true);
-
-            if (!builder.Environment.IsProduction())
-                tracerProviderBuilder
-                    .AddConsoleExporter()
-                    .AddJaegerExporter(t =>
-                    {
-                        var jaegerHost = builder.Configuration["OpenTelemetry:Jaeger:Host"];
-                        if (jaegerHost is not null)
-                            t.AgentHost = jaegerHost;
-                    });
-        });
+        builder.Services.AddOpenTelemetry(builder.Configuration,builder.Logging);
 
         builder.Services.AddFastEndpoints();
         builder.Services.AddAuthenticationJWTBearer(
