@@ -47,7 +47,7 @@ internal static class ServiceRegistrator
         if (!builder.Environment.IsProduction())
             builder.Services.AddSwaggerDoc(t => t.Title = "Users");
 
-        builder.Services.AddSingleton(ConnectionMultiplexer.Connect("redis"));
+        builder.Services.AddSingleton(ConnectionMultiplexer.Connect($"{builder.Configuration["Redis:Host"]}:{builder.Configuration["Redis:Port"]}"));
 
         builder.Services.AddGraphQLServer()
             .AddQueryType<UsersQuery>()
@@ -65,7 +65,7 @@ internal static class ServiceRegistrator
             .InitializeOnStartup()
             .PublishSchemaDefinition(t =>
                 t.SetName($"{Utils.Security.Services.Users}gql")
-                    .PublishToRedis("Schema",
+                    .PublishToRedis(builder.Configuration["GraphQl:GlobalSchemaName"],
                         sp => sp.GetRequiredService<ConnectionMultiplexer>()
                     )
             );
