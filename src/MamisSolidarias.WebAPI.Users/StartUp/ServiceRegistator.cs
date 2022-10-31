@@ -10,6 +10,7 @@ using MamisSolidarias.WebAPI.Users.Services;
 using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using StackExchange.Redis;
 
 namespace MamisSolidarias.WebAPI.Users.StartUp;
 
@@ -46,6 +47,8 @@ internal static class ServiceRegistrator
         if (!builder.Environment.IsProduction())
             builder.Services.AddSwaggerDoc(t => t.Title = "Users");
 
+        builder.Services.AddSingleton(ConnectionMultiplexer.Connect($"{builder.Configuration["Redis:Host"]}:{builder.Configuration["Redis:Port"]}"));
+
         builder.Services.AddGraphQLServer()
             .AddQueryType<UsersQuery>()
             .AddAuthorization()
@@ -59,6 +62,12 @@ internal static class ServiceRegistrator
                 t.RenameRootActivity = true;
                 t.IncludeDataLoaderKeys = true;
             })
-            .PublishSchemaDefinition(t => t.SetName($"{Utils.Security.Services.Users}gql"));
+            .InitializeOnStartup()
+            .PublishSchemaDefinition(t =>
+                t.SetName($"{Utils.Security.Services.Users}gql")
+                    .PublishToRedis(builder.Configuration["GraphQl:GlobalSchemaName"],
+                        sp => sp.GetRequiredService<ConnectionMultiplexer>()
+                    )
+            );
     }
 }
