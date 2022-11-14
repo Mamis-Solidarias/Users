@@ -1,73 +1,42 @@
 using FastEndpoints;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
-using HotChocolate.Diagnostics;
-using MamisSolidarias.Infrastructure.Users;
 using MamisSolidarias.Utils.Security;
 using MamisSolidarias.WebAPI.Users.Extensions;
-using MamisSolidarias.WebAPI.Users.Queries;
 using MamisSolidarias.WebAPI.Users.Services;
-using Microsoft.EntityFrameworkCore;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
-using StackExchange.Redis;
 
 namespace MamisSolidarias.WebAPI.Users.StartUp;
 
-internal static class ServiceRegistrator
+internal static class ServiceRegistrar
 {
+    private static ILoggerFactory CreateLoggerFactory(IConfiguration configuration) =>
+        LoggerFactory.Create(loggingBuilder => loggingBuilder
+            .AddConfiguration(configuration)
+            .AddConsole()
+        );
+
     public static void Register(WebApplicationBuilder builder)
     {
-        var connectionString = builder.Environment.EnvironmentName.ToLower() switch
-        {
-            "production" => builder.Configuration.GetConnectionString("Production"),
-            _ => builder.Configuration.GetConnectionString("Development")
-        };
+        using var loggerFactory = CreateLoggerFactory(builder.Configuration);
 
         builder.Services.AddDataProtection(builder.Configuration);
-        builder.Services.AddOpenTelemetry(builder.Configuration,builder.Logging);
+        builder.Services.AddOpenTelemetry(builder.Configuration, builder.Logging, loggerFactory);
 
         builder.Services.AddFastEndpoints();
         builder.Services.AddAuthenticationJWTBearer(
-            builder.Configuration["Jwt:Key"],
+            builder.Configuration["Jwt:Key"] ?? throw new ArgumentNullException(),
             builder.Configuration["Jwt:Issuer"]
         );
-
         builder.Services.AddAuthorization(t => t.ConfigurePolicies(Utils.Security.Services.Users));
 
-        builder.Services.AddDbContext<UsersDbContext>(
-            t =>
-                t.UseNpgsql(connectionString, r => r.MigrationsAssembly("MamisSolidarias.WebAPI.Users"))
-                    .EnableSensitiveDataLogging(!builder.Environment.IsProduction())
-                    .EnableDetailedErrors(!builder.Environment.IsProduction())
-        );
-
-        builder.Services.AddScoped<ITextHasher, TextHasher>();
+        builder.Services.AddDbContext(builder.Configuration, builder.Environment,loggerFactory);
 
         if (!builder.Environment.IsProduction())
             builder.Services.AddSwaggerDoc(t => t.Title = "Users");
 
-        builder.Services.AddSingleton(ConnectionMultiplexer.Connect($"{builder.Configuration["Redis:Host"]}:{builder.Configuration["Redis:Port"]}"));
+        builder.Services.AddRedis(builder.Configuration, loggerFactory);
+        builder.Services.AddGraphQl(builder.Configuration, loggerFactory);
 
-        builder.Services.AddGraphQLServer()
-            .AddQueryType<UsersQuery>()
-            .AddAuthorization()
-            .AddProjections()
-            .RegisterDbContext<UsersDbContext>()
-            .AddInstrumentation(t =>
-            {
-                t.Scopes = ActivityScopes.All;
-                t.IncludeDocument = true;
-                t.RequestDetails = RequestDetails.All;
-                t.RenameRootActivity = true;
-                t.IncludeDataLoaderKeys = true;
-            })
-            .InitializeOnStartup()
-            .PublishSchemaDefinition(t =>
-                t.SetName($"{Utils.Security.Services.Users}gql")
-                    .PublishToRedis(builder.Configuration["GraphQl:GlobalSchemaName"],
-                        sp => sp.GetRequiredService<ConnectionMultiplexer>()
-                    )
-            );
+        builder.Services.AddScoped<ITextHasher, TextHasher>();
     }
 }

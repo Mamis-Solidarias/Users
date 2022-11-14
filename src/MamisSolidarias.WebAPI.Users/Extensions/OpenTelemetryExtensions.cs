@@ -3,16 +3,27 @@ using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+// ReSharper disable UnusedMethodReturnValue.Local
+// ReSharper disable UnusedAutoPropertyAccessor.Local
+// ReSharper disable ClassNeverInstantiated.Local
 
 namespace MamisSolidarias.WebAPI.Users.Extensions;
 
 internal static class OpenTelemetryExtensions
 {
+    private static ILogger? _logger;
     public static void AddOpenTelemetry(this IServiceCollection services, IConfiguration configuration,
-        ILoggingBuilder logging)
+        ILoggingBuilder logging, ILoggerFactory loggerFactory)
     {
+        _logger = loggerFactory.CreateLogger("OpenTelemetry");
         var options = configuration.GetSection("OpenTelemetry").Get<OpenTelemetryOptions>();
 
+        if (options is null)
+        {
+            _logger.LogInformation("Configuration was not found. OpenTelemetry will be disabled.");
+            return;
+        }
+        
         var resourceBuilder = ResourceBuilder
             .CreateDefault()
             .AddService(options.Name, "MamisSolidarias", options.Version)
@@ -22,9 +33,9 @@ internal static class OpenTelemetryExtensions
         {
             tracerProviderBuilder
                 .SetResourceBuilder(resourceBuilder)
-                .AddNewRelicExporter(options.NewRelic)
+                .AddNewRelicTraceExporter(options.NewRelic)
                 .AddConsoleExporter(options.UseConsole)
-                .AddJaegerExporter(options.Jaeger)
+                .AddJaegerTraceExporter(options.Jaeger)
                 .AddHttpClientInstrumentation(t => t.RecordException = true)
                 .AddAspNetCoreInstrumentation(t => t.RecordException = true)
                 .AddEntityFrameworkCoreInstrumentation(t => t.SetDbStatementForText = true)
@@ -36,7 +47,7 @@ internal static class OpenTelemetryExtensions
         {
             meterProviderBuilder
                 .SetResourceBuilder(resourceBuilder)
-                .AddNewRelicExporter(options.NewRelic)
+                .AddNewRelicMetricsExporter(options.NewRelic)
                 .AddRuntimeInstrumentation()
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation();
@@ -53,15 +64,18 @@ internal static class OpenTelemetryExtensions
             logsProviderBuilder.IncludeScopes = true;
             logsProviderBuilder
                 .SetResourceBuilder(resourceBuilder)
-                .AddNewRelicExporter(options.NewRelic);
+                .AddNewRelicLogExporter(options.NewRelic);
         });
     }
     
-        private static TracerProviderBuilder AddNewRelicExporter(this TracerProviderBuilder builder,
+        private static TracerProviderBuilder AddNewRelicTraceExporter(this TracerProviderBuilder builder,
         NewRelicOptions? newRelicOptions)
     {
         if (string.IsNullOrWhiteSpace(newRelicOptions?.Url) || string.IsNullOrWhiteSpace(newRelicOptions.ApiKey))
+        {
+            _logger?.LogInformation("NewRelic telemetry configuration was not found.");
             return builder;
+        }
         
         return builder.AddOtlpExporter(t =>
         {
@@ -70,26 +84,30 @@ internal static class OpenTelemetryExtensions
         });
     }
 
-    private static OpenTelemetryLoggerOptions AddNewRelicExporter(this OpenTelemetryLoggerOptions builder,
+    private static OpenTelemetryLoggerOptions AddNewRelicLogExporter(this OpenTelemetryLoggerOptions builder,
         NewRelicOptions? newRelicOptions)
     {
         if (string.IsNullOrWhiteSpace(newRelicOptions?.Url) || string.IsNullOrWhiteSpace(newRelicOptions.ApiKey))
+        {
+            _logger?.LogInformation("NewRelic telemetry configuration was not found.");
             return builder;
+        }
 
         return builder.AddOtlpExporter(t =>
         {
             t.Endpoint = new Uri(newRelicOptions.Url);
             t.Headers = $"api-key={newRelicOptions.ApiKey}";
         });
-        ;
     }
 
-    private static MeterProviderBuilder AddNewRelicExporter(this MeterProviderBuilder builder,
+    private static MeterProviderBuilder AddNewRelicMetricsExporter(this MeterProviderBuilder builder,
         NewRelicOptions? newRelicOptions)
     {
         if (string.IsNullOrWhiteSpace(newRelicOptions?.Url) || string.IsNullOrWhiteSpace(newRelicOptions.ApiKey))
+        {
+            _logger?.LogInformation("NewRelic telemetry configuration was not found.");
             return builder;
-
+        }
         return builder.AddOtlpExporter((t, m) =>
         {
             t.Endpoint = new Uri(newRelicOptions.Url);
@@ -98,12 +116,15 @@ internal static class OpenTelemetryExtensions
         });
     }
 
-    private static TracerProviderBuilder AddJaegerExporter(this TracerProviderBuilder builder,
+    private static TracerProviderBuilder AddJaegerTraceExporter(this TracerProviderBuilder builder,
         JaegerOptions? jaegerOptions)
     {
         if (jaegerOptions is null || string.IsNullOrWhiteSpace(jaegerOptions.Url))
+        {
+            _logger?.LogInformation("Jaeger telemetry configuration was not found.");
             return builder;
-
+        }
+            
         return builder.AddJaegerExporter(t => t.AgentHost = jaegerOptions.Url);
     }
 
@@ -114,25 +135,18 @@ internal static class OpenTelemetryExtensions
         return builder;
     }
     
-    // ReSharper disable once ClassNeverInstantiated.Local
-    private sealed class NewRelicOptions
-    {
-        public string? ApiKey { get; init; }
-        public string? Url { get; init; }
-    }
-
-    // ReSharper disable once ClassNeverInstantiated.Local
-    private sealed class JaegerOptions
-    {
-        public string? Url { get; init; } = string.Empty;
-    }
+    private sealed record NewRelicOptions(string? Url, string? ApiKey);
+    
+    private sealed record JaegerOptions(string? Url);
 
     private sealed class OpenTelemetryOptions
     {
+
         public string Name { get; init; } = string.Empty;
         public string Version { get; init; } = string.Empty;
-        public JaegerOptions? Jaeger { get; init; }
-        public NewRelicOptions? NewRelic { get; init; }
         public bool UseConsole { get; init; }
+        public NewRelicOptions? NewRelic { get; init; }
+        public JaegerOptions? Jaeger { get; init; }
+
     }
 }

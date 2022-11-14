@@ -1,7 +1,6 @@
 using HotChocolate.AspNetCore.Authorization;
 using MamisSolidarias.Infrastructure.Users;
 using MamisSolidarias.Infrastructure.Users.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace MamisSolidarias.WebAPI.Users.Queries;
 
