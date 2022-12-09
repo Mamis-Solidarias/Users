@@ -20,7 +20,7 @@ internal static class OpenTelemetryExtensions
 
         if (options is null)
         {
-            _logger.LogInformation("Configuration was not found. OpenTelemetry will be disabled.");
+            _logger.LogInformation("Configuration was not found. OpenTelemetry will be disabled");
             return;
         }
         
@@ -73,7 +73,7 @@ internal static class OpenTelemetryExtensions
     {
         if (string.IsNullOrWhiteSpace(newRelicOptions?.Url) || string.IsNullOrWhiteSpace(newRelicOptions.ApiKey))
         {
-            _logger?.LogInformation("NewRelic telemetry configuration was not found.");
+            _logger?.LogInformation("NewRelic telemetry configuration was not found");
             return builder;
         }
         
@@ -89,7 +89,7 @@ internal static class OpenTelemetryExtensions
     {
         if (string.IsNullOrWhiteSpace(newRelicOptions?.Url) || string.IsNullOrWhiteSpace(newRelicOptions.ApiKey))
         {
-            _logger?.LogInformation("NewRelic telemetry configuration was not found.");
+            _logger?.LogInformation("NewRelic telemetry configuration was not found");
             return builder;
         }
 
@@ -105,7 +105,7 @@ internal static class OpenTelemetryExtensions
     {
         if (string.IsNullOrWhiteSpace(newRelicOptions?.Url) || string.IsNullOrWhiteSpace(newRelicOptions.ApiKey))
         {
-            _logger?.LogInformation("NewRelic telemetry configuration was not found.");
+            _logger?.LogInformation("NewRelic telemetry configuration was not found");
             return builder;
         }
         return builder.AddOtlpExporter((t, m) =>
@@ -121,7 +121,7 @@ internal static class OpenTelemetryExtensions
     {
         if (jaegerOptions is null || string.IsNullOrWhiteSpace(jaegerOptions.Url))
         {
-            _logger?.LogInformation("Jaeger telemetry configuration was not found.");
+            _logger?.LogInformation("Jaeger telemetry configuration was not found");
             return builder;
         }
             
