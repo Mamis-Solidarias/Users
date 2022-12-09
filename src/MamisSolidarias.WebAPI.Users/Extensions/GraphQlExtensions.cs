@@ -31,7 +31,7 @@ internal static class GraphQlExtensions
 
         if (options is null)
         {
-            logger.LogInformation("GraphQl gateway options not found.");
+            logger.LogInformation("GraphQl gateway options not found");
             return;
         }
 

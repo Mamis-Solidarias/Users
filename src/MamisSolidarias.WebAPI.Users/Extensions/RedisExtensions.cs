@@ -12,7 +12,7 @@ internal static class RedisExtensions
         
         if (options is null)
         {
-            logger.LogError("Redis configuration not found.");
+            logger.LogError("Redis configuration not found");
             throw new ArgumentNullException(nameof(options));
         }
         

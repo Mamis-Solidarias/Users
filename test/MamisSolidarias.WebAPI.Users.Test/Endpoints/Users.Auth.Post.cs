@@ -30,7 +30,7 @@ internal class UsersAuthPost
     [SetUp]
     public void Setup()
     {
-        var inMemorySettings = new Dictionary<string, string>
+        var inMemorySettings = new Dictionary<string, string?>
         {
             {"JWT:Key", JwtKey},
             { "JWT:ExpiresIn","10"},
