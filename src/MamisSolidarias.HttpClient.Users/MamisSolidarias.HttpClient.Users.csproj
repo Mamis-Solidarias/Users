@@ -1,19 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <Authors>MamisSolidarias</Authors>
         <PackageProjectUrl>https://github.com/Mamis-Solidarias/Users</PackageProjectUrl>
-        <PackageVersion>1.0.11</PackageVersion>
+        <PackageVersion>1.0.12</PackageVersion>
         <RepositoryUrl>https://github.com/Mamis-Solidarias/Users</RepositoryUrl>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <LangVersion>default</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="MamisSolidarias.Utils" Version="1.4.1" />
-        <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="6.0.10" />
+        <PackageReference Include="MamisSolidarias.Utils" Version="1.4.2" />
+        <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="7.0.0" />
         <PackageReference Include="Polly" Version="7.2.3" />
     </ItemGroup>
 

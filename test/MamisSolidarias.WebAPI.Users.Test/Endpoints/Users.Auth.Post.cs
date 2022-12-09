@@ -19,8 +19,7 @@ using EndpointFactory = MamisSolidarias.Utils.Test.EndpointFactory;
 
 namespace MamisSolidarias.WebAPI.Users.Endpoints;
 
-// ReSharper disable once InconsistentNaming
-internal class Users_Auth_Post
+internal class UsersAuthPost
 {
     private readonly Mock<ILogger<Endpoint<Request, Response>>> _mockLogger = new();
     private readonly Mock<ITextHasher> _mockedTextHasher = new();
@@ -31,7 +30,7 @@ internal class Users_Auth_Post
     [SetUp]
     public void Setup()
     {
-        var inMemorySettings = new Dictionary<string, string>
+        var inMemorySettings = new Dictionary<string, string?>
         {
             {"JWT:Key", JwtKey},
             { "JWT:ExpiresIn","10"},

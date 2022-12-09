@@ -16,6 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: ldellisola/verify-nuget-package-version@v1.2.1
+      - uses: ldellisola/verify-nuget-package-version@v1.4.0
         with:
             PROJECT_FILE_PATH: 'src/MamisSolidarias.HttpClient.Users/MamisSolidarias.HttpClient.Users.csproj'
