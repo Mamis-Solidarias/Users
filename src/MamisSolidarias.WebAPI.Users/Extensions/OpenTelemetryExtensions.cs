@@ -1,17 +1,16 @@
 using Npgsql;
+using OpenTelemetry;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-// ReSharper disable UnusedMethodReturnValue.Local
-// ReSharper disable UnusedAutoPropertyAccessor.Local
-// ReSharper disable ClassNeverInstantiated.Local
 
 namespace MamisSolidarias.WebAPI.Users.Extensions;
 
 internal static class OpenTelemetryExtensions
 {
     private static ILogger? _logger;
+
     public static void AddOpenTelemetry(this IServiceCollection services, IConfiguration configuration,
         ILoggingBuilder logging, ILoggerFactory loggerFactory)
     {
@@ -23,35 +22,34 @@ internal static class OpenTelemetryExtensions
             _logger.LogInformation("Configuration was not found. OpenTelemetry will be disabled");
             return;
         }
-        
+
         var resourceBuilder = ResourceBuilder
             .CreateDefault()
             .AddService(options.Name, "MamisSolidarias", options.Version)
             .AddTelemetrySdk();
 
-        services.AddOpenTelemetryTracing(tracerProviderBuilder =>
-        {
-            tracerProviderBuilder
-                .SetResourceBuilder(resourceBuilder)
-                .AddNewRelicTraceExporter(options.NewRelic)
-                .AddConsoleExporter(options.UseConsole)
-                .AddJaegerTraceExporter(options.Jaeger)
-                .AddHttpClientInstrumentation(t => t.RecordException = true)
-                .AddAspNetCoreInstrumentation(t => t.RecordException = true)
-                .AddEntityFrameworkCoreInstrumentation(t => t.SetDbStatementForText = true)
-                .AddHotChocolateInstrumentation()
-                .AddNpgsql();
-        });
-
-        services.AddOpenTelemetryMetrics(meterProviderBuilder =>
-        {
-            meterProviderBuilder
-                .SetResourceBuilder(resourceBuilder)
-                .AddNewRelicMetricsExporter(options.NewRelic)
-                .AddRuntimeInstrumentation()
-                .AddAspNetCoreInstrumentation()
-                .AddHttpClientInstrumentation();
-        });
+        services.AddOpenTelemetry().WithTracing(tracerProviderBuilder =>
+            {
+                tracerProviderBuilder
+                    .SetResourceBuilder(resourceBuilder)
+                    .AddNewRelicTraceExporter(options.NewRelic)
+                    .AddConsoleExporter(options.UseConsole)
+                    .AddJaegerTraceExporter(options.Jaeger)
+                    .AddHttpClientInstrumentation(t => t.RecordException = true)
+                    .AddAspNetCoreInstrumentation(t => t.RecordException = true)
+                    .AddEntityFrameworkCoreInstrumentation(t => t.SetDbStatementForText = true)
+                    .AddHotChocolateInstrumentation()
+                    .AddNpgsql();
+            })
+            .WithMetrics(meterProviderBuilder =>
+            {
+                meterProviderBuilder
+                    .SetResourceBuilder(resourceBuilder)
+                    .AddNewRelicMetricsExporter(options.NewRelic)
+                    .AddRuntimeInstrumentation()
+                    .AddAspNetCoreInstrumentation()
+                    .AddHttpClientInstrumentation();
+            });
 
         // Configure the OpenTelemetry SDK for logs
         logging.ClearProviders();
@@ -67,8 +65,8 @@ internal static class OpenTelemetryExtensions
                 .AddNewRelicLogExporter(options.NewRelic);
         });
     }
-    
-        private static TracerProviderBuilder AddNewRelicTraceExporter(this TracerProviderBuilder builder,
+
+    private static TracerProviderBuilder AddNewRelicTraceExporter(this TracerProviderBuilder builder,
         NewRelicOptions? newRelicOptions)
     {
         if (string.IsNullOrWhiteSpace(newRelicOptions?.Url) || string.IsNullOrWhiteSpace(newRelicOptions.ApiKey))
@@ -76,7 +74,7 @@ internal static class OpenTelemetryExtensions
             _logger?.LogInformation("NewRelic telemetry configuration was not found");
             return builder;
         }
-        
+
         return builder.AddOtlpExporter(t =>
         {
             t.Endpoint = new Uri(newRelicOptions.Url);
@@ -108,6 +106,7 @@ internal static class OpenTelemetryExtensions
             _logger?.LogInformation("NewRelic telemetry configuration was not found");
             return builder;
         }
+
         return builder.AddOtlpExporter((t, m) =>
         {
             t.Endpoint = new Uri(newRelicOptions.Url);
@@ -124,7 +123,7 @@ internal static class OpenTelemetryExtensions
             _logger?.LogInformation("Jaeger telemetry configuration was not found");
             return builder;
         }
-            
+
         return builder.AddJaegerExporter(t => t.AgentHost = jaegerOptions.Url);
     }
 
@@ -134,19 +133,17 @@ internal static class OpenTelemetryExtensions
             builder.AddConsoleExporter();
         return builder;
     }
-    
+
     private sealed record NewRelicOptions(string? Url, string? ApiKey);
-    
+
     private sealed record JaegerOptions(string? Url);
 
     private sealed class OpenTelemetryOptions
     {
-
         public string Name { get; init; } = string.Empty;
         public string Version { get; init; } = string.Empty;
         public bool UseConsole { get; init; }
         public NewRelicOptions? NewRelic { get; init; }
         public JaegerOptions? Jaeger { get; init; }
-
     }
 }
