@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
 using FluentAssertions;
-
+using MamisSolidarias.Infrastructure.Users.Models;
 using MamisSolidarias.WebAPI.Users.Endpoints.Users.GET;
 using MamisSolidarias.WebAPI.Users.Utils;
 using Microsoft.Extensions.Logging;
@@ -39,7 +39,9 @@ internal class Users_Get
     public async Task WithValidParameters_Succeeds()
     {
         // Arrange
-        var users = DataFactory.GetUsers(10).ToArray();
+        var users = DataFactory.GetUsers(10)
+	        .Select(t=> t.Build())
+	        .ToArray();
         var request = new Request
         {
             PageSize = 10,
@@ -74,7 +76,7 @@ internal class Users_Get
     public async Task WithValidParameters_NoUsers_Succeeds()
     {
         // Arrange
-        var users = DataFactory.GetUsers(0).ToArray();
+        var users = Enumerable.Empty<User>();
         var request = new Request
         {
             PageSize = 10,

@@ -42,7 +42,7 @@ internal class Users_Post
     public async Task WithValidParameters_Succeeds()
     {
         //arrange
-        var user = DataFactory.GetUser();
+        var user = DataFactory.GetUser().Build();
         var req = new Request
         {
             Name = user.Name,
@@ -77,7 +77,7 @@ internal class Users_Post
     public async Task WithRepeatedEmail_Fails()
     {
         //arrange
-        var user = DataFactory.GetUser();
+        var user = DataFactory.GetUser().Build();
         var req = new Request
         {
             Name = user.Name,
@@ -106,7 +106,7 @@ internal class Users_Post
     public async Task WithRepeatedPhone_Fails()
     {
         // arrange
-        var user = DataFactory.GetUser();
+        var user = DataFactory.GetUser().Build();
         var req = new Request
         {
             Name = user.Name,

@@ -3,21 +3,21 @@ using FastEndpoints.Security;
 using MamisSolidarias.Infrastructure.Users;
 using MamisSolidarias.Infrastructure.Users.Models;
 using MamisSolidarias.WebAPI.Users.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace MamisSolidarias.WebAPI.Users.Endpoints.Users.Auth.POST;
 
 internal class Endpoint : Endpoint<Request, Response>
 {
-    private readonly DbAccess _dbAccess;
     private readonly ITextHasher _textHasher;
-    private readonly IConfiguration _configuration;
+    private readonly IRolesCache _rolesCache;
+    private readonly UsersDbContext _dbContext;
 
-    public Endpoint(UsersDbContext dbContext, ITextHasher textHasher, IConfiguration configuration,
-        DbAccess? dbAccess = null)
+    public Endpoint(UsersDbContext dbContext, ITextHasher textHasher, IRolesCache rolesCache)
     {
         _textHasher = textHasher;
-        _configuration = configuration;
-        _dbAccess = dbAccess ?? new DbAccess(dbContext);
+        _rolesCache = rolesCache;
+        _dbContext = dbContext;
     }
 
     public override void Configure()
@@ -28,32 +28,39 @@ internal class Endpoint : Endpoint<Request, Response>
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        req.Email = req.Email.Trim().ToLowerInvariant();
-        var user = await _dbAccess.FindUserByEmail(req.Email, ct);
+	    try
+	    {
+		    req.Email = req.Email.Trim().ToLowerInvariant();
 
-        if (user is null)
-        {
-            await SendUnauthorizedAsync(ct);
-            return;
-        }
+		    var user = await _dbContext.Users
+			    .Include(t => t.Roles)
+			    .Where(t => t.IsActive == true)
+			    .SingleAsync(t => t.Email == req.Email, ct);
 
-        var (_, hashedPassword) = _textHasher.Hash(req.Password, Convert.FromBase64String(user.Salt));
-        if (user.Password != hashedPassword)
-        {
-            await SendUnauthorizedAsync(ct);
-            return;
-        }
 
-        ArgumentNullException.ThrowIfNull(_configuration);
-        
-        var jwtToken = JWTBearer.CreateToken(
-            "This token is only used to create the cookie later",
-            claims: new[] {("Email", user.Email), ("Id", user.Id.ToString()), ("Name", user.Name)},
-            permissions: GetUserPermissions(user)
-        );
+		    var (_, hashedPassword) = _textHasher.Hash(req.Password, Convert.FromBase64String(user.Salt));
+		    if (user.Password != hashedPassword)
+		    {
+			    await SendUnauthorizedAsync(ct);
+			    return;
+		    }
 
-        await SendOkAsync(new Response {Jwt = jwtToken}, ct);
+		    var jwtToken = JWTBearer.CreateToken(
+			    "This token is only used to create the cookie later",
+			    claims: new[] { ("Email", user.Email), ("Id", user.Id.ToString()), ("Name", user.Name) }
+		    );
+
+		    await _rolesCache.SetPermissions(user.Id, GetUserPermissions(user));
+
+		    await SendOkAsync(new Response { Jwt = jwtToken }, ct);
+	    }
+	    catch (InvalidOperationException)
+	    {
+		    await SendUnauthorizedAsync(ct);
+	    }
     }
+    
+    
 
     private static IEnumerable<string> GetUserPermissions(User user)
     {

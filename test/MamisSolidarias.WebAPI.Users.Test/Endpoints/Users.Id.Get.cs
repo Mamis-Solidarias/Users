@@ -44,7 +44,7 @@ internal class Users_Id_Get
     public async Task WithValidParameters_AsAdmin_Succeeds()
     {
         // Arrange
-        var user = DataFactory.GetUser();
+        var user = DataFactory.GetUser().Build();
         var claims = new[] {new Claim(Constants.PermissionsClaimType,"Users/read")};
         
         _mockClaims.SetupGet(t => t.Identities)
@@ -73,7 +73,7 @@ internal class Users_Id_Get
     public async Task WithValidParameters_AsOwnerOfAccount_Succeeds()
     {
         // Arrange
-        var user = DataFactory.GetUser();
+        var user = DataFactory.GetUser().Build();
         var claims = new[] {new Claim("Id",user.Id.ToString())};
         
         _mockClaims.SetupGet(t => t.Identities)
@@ -101,7 +101,7 @@ internal class Users_Id_Get
     public async Task AsAnUnauthorizedUser_Fails()
     {
         // Arrange
-        var user = DataFactory.GetUser();
+        var user = DataFactory.GetUser().Build();
         var claims = new[] {new Claim("Id",123.ToString())};
         
         _mockClaims.SetupGet(t => t.Identities)
@@ -120,7 +120,7 @@ internal class Users_Id_Get
     public async Task UserDoesNotExist_Fails()
     {
         // Arrange
-        var user = DataFactory.GetUser();
+        var user = DataFactory.GetUser().Build();
         var claims = new[] {new Claim(Constants.PermissionsClaimType,"Users/read")};
         
         _mockClaims.SetupGet(t => t.Identities)
