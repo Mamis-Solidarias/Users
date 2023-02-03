@@ -47,7 +47,7 @@ internal class Users_Id_Password_Put
     public async Task IsAdmin_WithValidArguments_Succeeds()
     {
         // Arrange
-        var user = DataFactory.GetUser();
+        var user = DataFactory.GetUser().Build();
         var request = new Request
         {
             Id = user.Id,
@@ -82,7 +82,7 @@ internal class Users_Id_Password_Put
     public async Task IsAccountOwner_WithValidArguments_Succeeds()
     {
         // Arrange
-        var user = DataFactory.GetUser();
+        var user = DataFactory.GetUser().Build();
         var request = new Request
         {
             Id = user.Id,
@@ -115,7 +115,7 @@ internal class Users_Id_Password_Put
     public async Task NotAuthorized_WithValidArguments_Fails()
     {
         // Arrange
-        var user = DataFactory.GetUser();
+        var user = DataFactory.GetUser().Build();
         var request = new Request
         {
             Id = user.Id,
@@ -135,7 +135,7 @@ internal class Users_Id_Password_Put
     public async Task WithInvalidArguments_UserNotFound_Fails()
     {
         // Arrange
-        var user = DataFactory.GetUser();
+        var user = DataFactory.GetUser().Build();
         var request = new Request
         {
             Id = user.Id,
@@ -163,7 +163,7 @@ internal class Users_Id_Password_Put
     public async Task WithInvalidArguments_OldPasswordDoesNotMatch_Fails()
     {
         // Arrange
-        var user = DataFactory.GetUser();
+        var user = DataFactory.GetUser().Build();
         var request = new Request
         {
             Id = user.Id,

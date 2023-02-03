@@ -33,7 +33,7 @@ internal class Users_Id_Patch
     public async Task WithValidParameters_UpdatingAllValues_Succeeds()
     {
         // Arrange
-        var user = DataFactory.GetUser();
+        var user = DataFactory.GetUser().Build();
         
         var claims = new[] {new Claim(PermissionsClaimType,"Users/write")};
         _mockClaims.SetupGet(t => t.Identities)
@@ -68,7 +68,7 @@ internal class Users_Id_Patch
     public async Task WithValidParameters_UpdatingSomeValues_Succeeds()
     {
         // Arrange
-        var user = DataFactory.GetUser();
+        var user = DataFactory.GetUser().Build();
         
         var claims = new[] {new Claim(PermissionsClaimType,"Users/write")};
         _mockClaims.SetupGet(t => t.Identities)
@@ -101,7 +101,7 @@ internal class Users_Id_Patch
     public async Task WithValidParameters_AsAccountOwner_Succeeds()
     {
         // Arrange
-        var user = DataFactory.GetUser();
+        var user = DataFactory.GetUser().Build();
         
         var claims = new[] {new Claim("Id",$"{user.Id}")};
         _mockClaims.SetupGet(t => t.Identities)
@@ -136,7 +136,7 @@ internal class Users_Id_Patch
     public async Task WithInvalidParameters_NoPermissions_Fails()
     {
         // Arrange
-        var user = DataFactory.GetUser();
+        var user = DataFactory.GetUser().Build();
         
         _mockClaims.SetupGet(t => t.Identities)
             .Returns(new[] {new ClaimsIdentity()});
@@ -160,7 +160,7 @@ internal class Users_Id_Patch
     public async Task WithInvalidParameters_OtherUser_Fails()
     {
         // Arrange
-        var user = DataFactory.GetUser();
+        var user = DataFactory.GetUser().Build();
         
         var claims = new[] {new Claim("Id",$"{123}")};
         _mockClaims.SetupGet(t => t.Identities)
@@ -185,7 +185,7 @@ internal class Users_Id_Patch
     public async Task WithInvalidParameters_UserDoesNotExist_Fails()
     {
         // Arrange
-        var user = DataFactory.GetUser();
+        var user = DataFactory.GetUser().Build();
         
         var claims = new[] {new Claim(PermissionsClaimType,"Users/write")};
         _mockClaims.SetupGet(t => t.Identities)
@@ -213,7 +213,7 @@ internal class Users_Id_Patch
     public async Task WithInvalidParameters_EmailAlreadyExists_Succeeds()
     {
         // Arrange
-        var user = DataFactory.GetUser();
+        var user = DataFactory.GetUser().Build();
         
         var claims = new[] {new Claim(PermissionsClaimType,"Users/write")};
         _mockClaims.SetupGet(t => t.Identities)

@@ -34,8 +34,9 @@ internal class Users_Id_Post
     public async Task WithValidParameters_Succeeds()
     {
         // Arrange
-        var user = DataFactory.GetUser();
-        user.IsActive = false;
+        var user = DataFactory.GetUser()
+	        .IsActive(false)
+	        .Build();
         var request = new Request {Id = user.Id};
         
         _mockDbAccess.Setup(t =>
@@ -71,7 +72,7 @@ internal class Users_Id_Post
     public async Task WithInvalidParameters_UserAlreadyActive_Fails()
     {
         // Arrange
-        var user = DataFactory.GetUser();
+        var user = DataFactory.GetUser().Build();
         var request = new Request {Id = user.Id};
         
         _mockDbAccess.Setup(t =>

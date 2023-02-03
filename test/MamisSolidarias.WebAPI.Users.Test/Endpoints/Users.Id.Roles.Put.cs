@@ -1,126 +1,113 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading;
 using System.Threading.Tasks;
-using FastEndpoints;
 using FluentAssertions;
 using MamisSolidarias.Infrastructure.Users.Models;
 using MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Roles.PUT;
+using MamisSolidarias.WebAPI.Users.Services;
 using MamisSolidarias.WebAPI.Users.Utils;
-using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
-using EndpointFactory = MamisSolidarias.Utils.Test.EndpointFactory;
 
 namespace MamisSolidarias.WebAPI.Users.Endpoints;
 
-// ReSharper disable once InconsistentNaming
-internal class Users_Id_Roles_Put
+internal class Users_Id_Roles_Put : EndpointTest<Endpoint>
 {
-    private readonly Mock<ILogger<Endpoint<Request,Response>>> _mockLogger = new();
-    private readonly Mock<DbAccess> _mockDbAccess = new(); 
-    private readonly Mock<ClaimsPrincipal> _mockClaims = new(){CallBase = true};
-    private Endpoint _endpoint = null!;
-    
-    [SetUp]
-    public void Setup()
-    {
-        _endpoint = EndpointFactory
-            .CreateEndpoint<Endpoint>(null, _mockDbAccess.Object)
-            .WithClaims(_mockClaims.Object)
-            .Build();
-    }
+	private readonly Mock<ClaimsPrincipal> _mockClaims = new() { CallBase = true };
+	private readonly Mock<IRolesCache> _rolesCache = new();
 
-    [TearDown]
-    public void Dispose()
-    {
-        _mockClaims.Reset();
-        _mockLogger.Reset();
-        _mockDbAccess.Reset();
-    }
+	protected override object?[] ConstructorArguments => new object?[]
+	{
+		_dbContext, _rolesCache.Object
+	};
 
-    [Test]
-    public async Task WithValidParameters_Succeeds()
-    {
-        // Arrange
-        var user = DataFactory.GetUser();
+	public override void Teardown()
+	{
+		base.Teardown();
+		_mockClaims.Reset();
+	}
 
-        _mockDbAccess.Setup(t => t.GetUserById(It.Is<int>(r=> r == user.Id), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(user);
 
-        _mockDbAccess.Setup(t => t.SaveChanges(It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
+	[Test]
+	public async Task WithValidParameters_Succeeds()
+	{
+		// Arrange
+		var user = _dataFactory.GenerateUser().Build();
 
-        var request = new Request
-        {
-            Id = user.Id,
-            Roles = new []{new RoleRequest("Users",true,true)}
-        };
-        
-        // Act
-        await _endpoint.HandleAsync(request, default);
-        var response = _endpoint.Response;
-        
-        // Assert
-        _endpoint.HttpContext.Response.StatusCode.Should().Be(200);
-        response.Should().NotBeNull();
-        user.Roles.All(t =>
-            response.Roles.SingleOrDefault(r =>
-                r.Service == t.Service.ToString() &&
-                r.CanRead == t.CanRead &&
-                r.CanWrite == t.CanWrite
-            ) is not null).Should().BeTrue();
-    }
-    
-    [Test]
-    public async Task WithValidParameters_RemoveRoles_Succeeds()
-    {
-        // Arrange
-        var user = DataFactory.GetUser();
+		var request = new Request
+		{
+			Id = user.Id,
+			Roles = new[] { new RoleRequest("Users", true, true) }
+		};
 
-        _mockDbAccess.Setup(t => t.GetUserById(It.Is<int>(r=> r == user.Id), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(user);
+		// Act
+		await _endpoint.HandleAsync(request, default);
+		var response = _endpoint.Response;
 
-        _mockDbAccess.Setup(t => t.SaveChanges(It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
+		// Assert
+		_endpoint.HttpContext.Response.StatusCode.Should().Be(200);
+		response.Should().NotBeNull();
 
-        var request = new Request
-        {
-            Id = user.Id,
-            Roles = ArraySegment<RoleRequest>.Empty
-        };
-        
-        // Act
-        await _endpoint.HandleAsync(request, default);
-        var response = _endpoint.Response;
-        
-        // Assert
-        _endpoint.HttpContext.Response.StatusCode.Should().Be(200);
-        response.Should().NotBeNull();
-        response.Roles.Count().Should().Be(0);
-    }
+		var result = await _dbContext.Users.Include(t => t.Roles)
+			.SingleAsync(t => t.Id == user.Id);
 
-    [Test]
-    public async Task WithInvalidParameters_UserDoesNotExists_Fails()
-    {
-        // Arrange
-        var user = DataFactory.GetUser();
+		result.Roles.Should().BeEquivalentTo(new Role[]
+		{
+			new()
+			{
+				Service = MamisSolidarias.Utils.Security.Services.Users,
+				CanRead = true,
+				CanWrite = true
+			}
+		}, options => options.Excluding(t => t.Id));
+	}
 
-        _mockDbAccess.Setup(t => t.GetUserById(It.Is<int>(r=> r == user.Id), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((User?) null);
-        
+	[Test]
+	public async Task WithValidParameters_RemoveRoles_Succeeds()
+	{
+		// Arrange
+		var user = _dataFactory.GenerateUser().Build();
 
-        var request = new Request
-        {
-            Id = user.Id,
-            Roles = ArraySegment<RoleRequest>.Empty
-        };
-        
-        // Act
-        await _endpoint.HandleAsync(request, default);
-        
-        // Assert
-        _endpoint.HttpContext.Response.StatusCode.Should().Be(404);
-    }
+		var request = new Request
+		{
+			Id = user.Id,
+			Roles = new List<RoleRequest>()
+		};
+
+		// Act
+		await _endpoint.HandleAsync(request, default);
+		var response = _endpoint.Response;
+
+		// Assert
+		_endpoint.HttpContext.Response.StatusCode.Should().Be(200);
+		response.Should().NotBeNull();
+		response.Roles.Count().Should().Be(0);
+
+		var result = _dbContext.Users.Include(t => t.Roles)
+			.SingleAsync(t => t.Id == user.Id);
+
+		result.Result.Roles.Should().BeEmpty();
+	}
+
+	[Test]
+	public async Task WithInvalidParameters_UserDoesNotExists_Fails()
+	{
+		// Arrange
+		const int userId = 123;
+
+		var request = new Request
+		{
+			Id = userId,
+			Roles = ArraySegment<RoleRequest>.Empty
+		};
+
+		// Act
+		await _endpoint.HandleAsync(request, default);
+
+		// Assert
+		_endpoint.HttpContext.Response.StatusCode.Should().Be(404);
+	}
 }
