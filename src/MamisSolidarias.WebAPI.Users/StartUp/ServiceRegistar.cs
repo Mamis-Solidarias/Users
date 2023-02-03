@@ -34,5 +34,6 @@ internal static class ServiceRegistrar
         builder.Services.AddGraphQl(builder.Configuration, loggerFactory);
 
         builder.Services.AddScoped<ITextHasher, TextHasher>();
+        builder.Services.AddScoped<IRolesCache, RolesCache>();
     }
 }
