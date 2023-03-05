@@ -3,13 +3,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using MamisSolidarias.Infrastructure.Users.Models;
+using MamisSolidarias.Utils.Security;
 using MamisSolidarias.Utils.Test;
 using MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.PATCH;
 using MamisSolidarias.WebAPI.Users.Utils;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
-using static FastEndpoints.Security.Constants;
 
 namespace MamisSolidarias.WebAPI.Users.Endpoints;
 
@@ -35,7 +35,7 @@ internal class Users_Id_Patch
         // Arrange
         var user = DataFactory.GetUser().Build();
         
-        var claims = new[] {new Claim(PermissionsClaimType,"Users/write")};
+        var claims = new[] {new Claim(PolicyExtensions.PermissionClaimType,"Users/write")};
         _mockClaims.SetupGet(t => t.Identities)
             .Returns(new[] {new ClaimsIdentity(claims)});
 
@@ -70,7 +70,7 @@ internal class Users_Id_Patch
         // Arrange
         var user = DataFactory.GetUser().Build();
         
-        var claims = new[] {new Claim(PermissionsClaimType,"Users/write")};
+        var claims = new[] {new Claim(PolicyExtensions.PermissionClaimType,"Users/write")};
         _mockClaims.SetupGet(t => t.Identities)
             .Returns(new[] {new ClaimsIdentity(claims)});
 
@@ -187,7 +187,7 @@ internal class Users_Id_Patch
         // Arrange
         var user = DataFactory.GetUser().Build();
         
-        var claims = new[] {new Claim(PermissionsClaimType,"Users/write")};
+        var claims = new[] {new Claim(PolicyExtensions.PermissionClaimType,"Users/write")};
         _mockClaims.SetupGet(t => t.Identities)
             .Returns(new[] {new ClaimsIdentity(claims)});
 
@@ -215,7 +215,7 @@ internal class Users_Id_Patch
         // Arrange
         var user = DataFactory.GetUser().Build();
         
-        var claims = new[] {new Claim(PermissionsClaimType,"Users/write")};
+        var claims = new[] {new Claim(PolicyExtensions.PermissionClaimType,"Users/write")};
         _mockClaims.SetupGet(t => t.Identities)
             .Returns(new[] {new ClaimsIdentity(claims)});
 

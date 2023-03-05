@@ -3,9 +3,9 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
-using FastEndpoints.Security;
 using FluentAssertions;
 using MamisSolidarias.Infrastructure.Users.Models;
+using MamisSolidarias.Utils.Security;
 using MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Password.PUT;
 using MamisSolidarias.WebAPI.Users.Services;
 using MamisSolidarias.WebAPI.Users.Utils;
@@ -55,7 +55,7 @@ internal class Users_Id_Password_Put
             NewPassword = "NewPassword123!"
         };
 
-        var claims = new[] {new Claim(Constants.PermissionsClaimType,"Users/write")};
+        var claims = new[] {new Claim(PolicyExtensions.PermissionClaimType,"Users/write")};
         
         _mockClaims.SetupGet(t => t.Identities)
             .Returns(new[] {new ClaimsIdentity(claims)});
@@ -143,7 +143,7 @@ internal class Users_Id_Password_Put
             NewPassword = "NewPassword123!"
         };
 
-        var claims = new[] {new Claim(Constants.PermissionsClaimType,"Users/write")};
+        var claims = new[] {new Claim(PolicyExtensions.PermissionClaimType,"Users/write")};
         
         _mockClaims.SetupGet(t => t.Identities)
             .Returns(new[] {new ClaimsIdentity(claims)});

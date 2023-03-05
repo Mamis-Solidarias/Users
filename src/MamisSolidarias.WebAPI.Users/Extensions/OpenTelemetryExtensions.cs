@@ -1,5 +1,4 @@
 using Npgsql;
-using OpenTelemetry;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -130,7 +129,10 @@ internal static class OpenTelemetryExtensions
     private static TracerProviderBuilder AddConsoleExporter(this TracerProviderBuilder builder, bool useConsole)
     {
         if (useConsole)
+        {
             builder.AddConsoleExporter();
+        }
+
         return builder;
     }
 
