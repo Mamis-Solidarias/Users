@@ -3,9 +3,9 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
-using FastEndpoints.Security;
 using FluentAssertions;
 using MamisSolidarias.Infrastructure.Users.Models;
+using MamisSolidarias.Utils.Security;
 using MamisSolidarias.WebAPI.Users.Endpoints.Users.Id.Roles.GET;
 using MamisSolidarias.WebAPI.Users.Utils;
 using Microsoft.Extensions.Logging;
@@ -45,7 +45,7 @@ internal class Users_Id_Roles_Get
     {
         // Arrange
         var user = DataFactory.GetUser().Build();
-        var claims = new[] {new Claim(Constants.PermissionsClaimType,"Users/read")};
+        var claims = new[] {new Claim(PolicyExtensions.PermissionClaimType,"Users/read")};
         
         _mockClaims.SetupGet(t => t.Identities)
             .Returns(new[] {new ClaimsIdentity(claims)});
@@ -142,7 +142,7 @@ internal class Users_Id_Roles_Get
     {
         // Arrange
         var user = DataFactory.GetUser().Build();
-        var claims = new[] {new Claim(Constants.PermissionsClaimType,"Users/read")};
+        var claims = new[] {new Claim(PolicyExtensions.PermissionClaimType,"Users/read")};
         
         _mockClaims.SetupGet(t => t.Identities)
             .Returns(new[] {new ClaimsIdentity(claims)});
