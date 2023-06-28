@@ -21,7 +21,7 @@
         <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="12.18.0" />
         <PackageReference Include="HotChocolate.Data.EntityFramework" Version="12.18.0" />
         <PackageReference Include="HotChocolate.Diagnostics" Version="12.18.0" />
-        <PackageReference Include="HotChocolate.Stitching.Redis" Version="12.18.0" />
+        <PackageReference Include="HotChocolate.Stitching.Redis" Version="12.19.2" />
         <PackageReference Include="MamisSolidarias.Utils" Version="1.5.4" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.4">
             <PrivateAssets>all</PrivateAssets>
