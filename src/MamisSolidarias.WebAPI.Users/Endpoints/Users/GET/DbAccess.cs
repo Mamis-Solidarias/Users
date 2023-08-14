@@ -20,7 +20,7 @@ internal class DbAccess
     public virtual Task<int> GetTotalEntries(string? search, CancellationToken ct)
     {
         ArgumentNullException.ThrowIfNull(_dbContext);
-        var query = _dbContext.Users.Select(t => t);
+        var query = _dbContext.Users.AsQueryable();
 
         if (!string.IsNullOrEmpty(search))
             query = query.Where(t => t.Email.Contains(search) || t.Name.Contains(search) || t.Phone.Contains(search));
@@ -33,10 +33,11 @@ internal class DbAccess
     {
         ArgumentNullException.ThrowIfNull(_dbContext);
         var query = _dbContext.Users
+            .OrderBy(t=> t.Id)
             .Include(t => t.Roles)
             .Skip(page * pageSize)
             .Take(pageSize)
-            .Select(t => t);
+            .AsQueryable();
 
         if (!string.IsNullOrEmpty(search))
             query = query.Where(t => t.Email.Contains(search) || t.Name.Contains(search) || t.Phone.Contains(search));
