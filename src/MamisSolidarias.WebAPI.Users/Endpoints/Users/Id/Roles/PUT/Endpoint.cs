@@ -57,7 +57,17 @@ internal class Endpoint : Endpoint<Request, Response>
     
     private static IEnumerable<string> GetUserPermissions(IEnumerable<Role> roles)
     {
-	    return roles
+        var permissions = roles.ToList();
+        if (permissions.Any(t=> t.Service == Utils.Security.Services.Campaigns) && permissions.All(t => t.Service != Utils.Security.Services.Donors))
+            permissions.Add(new Role { CanRead = true, CanWrite = false, Service = Utils.Security.Services.Donors });
+
+        if (permissions.Any(t => t.Service == Utils.Security.Services.Donations) && permissions.All(t => t.Service != Utils.Security.Services.Donors))
+            permissions.Add(new Role { CanRead = true, CanWrite = false, Service = Utils.Security.Services.Donors });
+        
+        if (permissions.Any(t=> t.Service == Utils.Security.Services.Donors) && permissions.All(t => t.Service != Utils.Security.Services.Users))
+            permissions.Add(new Role { CanRead = true, CanWrite = false, Service = Utils.Security.Services.Users });
+        
+	    return permissions
 		    .SelectMany(t => new[]
 		    {
 			    (t.Service, Action: "read", CanDoAction: t.CanRead),

@@ -64,6 +64,15 @@ internal class Endpoint : Endpoint<Request, Response>
 
     private static IEnumerable<string> GetUserPermissions(User user)
     {
+        if (user.Roles.Any(t=> t.Service == Utils.Security.Services.Campaigns) && user.Roles.All(t => t.Service != Utils.Security.Services.Donors))
+            user.Roles.Add(new Role { CanRead = true, CanWrite = false, Service = Utils.Security.Services.Donors });
+
+        if (user.Roles.Any(t => t.Service == Utils.Security.Services.Donations) && user.Roles.All(t => t.Service != Utils.Security.Services.Donors))
+            user.Roles.Add(new Role { CanRead = true, CanWrite = false, Service = Utils.Security.Services.Donors });
+        
+        if (user.Roles.Any(t=> t.Service == Utils.Security.Services.Donors) && user.Roles.All(t => t.Service != Utils.Security.Services.Users))
+            user.Roles.Add(new Role { CanRead = true, CanWrite = false, Service = Utils.Security.Services.Users });
+        
         return user.Roles
             .SelectMany(t => new[]
             {
